@@ -164,7 +164,7 @@
     "href": "04-transform.html#strings",
     "title": "2  Transform",
     "section": "2.3 Strings",
-    "text": "2.3 Strings",
+    "text": "2.3 Strings\n\n\n\n\n\n\n\n\nUse `' or \" to create strings, \" is recommended per tidyverse style guidelines. To include a quotation mark, \\ to escape \\' and \\\".",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
     ]
