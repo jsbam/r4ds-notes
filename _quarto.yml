@@ -1,0 +1,48 @@
+project:
+  type: book
+
+book:
+  title: "My R4DS notes using webr"
+  author: "Norah Jones"
+  date: "7/31/2025"
+  chapters:
+    - index.qmd
+    - 01-intro.qmd
+    - 04-transform.qmd
+    - 05-import.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format: 
+  live-html:
+    css: "style-webr.css"
+webr:
+  cell-options:
+    fig-width: 5
+    fig-height: 3
+    autorun: false
+    completion: true
+    edit: true
+    eval: true
+    include: true
+    persist: true
+    warning: false
+  packages: 
+    - tidyverse
+    - palmerpenguins  # penguins dataset
+    - nycflights13    # data on flights from NY airport
+    - janitor
+    - Lahman          # basketball data
+    - usethis
+    - ggridges        # ridgline plots (extension of ggplot)
+    - rio             # import data from other software
+    - forcats # factor
+    - downlit
+    - xml2
+engine: knitr
+editor: source 
+
+
+

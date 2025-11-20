@@ -1,0 +1,388 @@
+---
+format: 
+  live-html:
+    css: "style-webr.css"
+webr:
+  cell-options:
+    fig-width: 5
+    fig-height: 3
+    autorun: false
+    completion: true
+    edit: true
+    eval: true
+    include: true
+    persist: true
+    warning: false
+  packages: 
+    - tidyverse
+    - palmerpenguins  # penguins dataset
+    - nycflights13    # data on flights from NY airport
+    - janitor
+    - Lahman          # basketball data
+    - usethis
+    - ggridges        # ridgline plots (extension of ggplot)
+    - rio             # import data from other software
+    - forcats # factor
+    - downlit
+    - xml2
+    - arrow
+    - babynames
+    - curl
+    - duckdb
+    - gapminder
+    - ggrepel
+    - ggridges
+    - ggthemes
+    - hexbin
+    - janitor
+    - Lahman
+    - leaflet
+    - maps
+    - nycflights13
+    - openxlsx
+    - palmerpenguins
+    - repurrrsive
+    - tidymodels
+    - writexl
+---
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+## Transform
+
+## Logical vectors
+
+## Numbers
+
+## Strings
+
+```{webr}
+# install.packages(
+#   c("arrow", "babynames", "curl", "duckdb", "gapminder", 
+#     "ggrepel", "ggridges", "ggthemes", "hexbin", "janitor", "Lahman", 
+#     "leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins", 
+#     "repurrrsive", "tidymodels", "writexl")
+#   )
+library(tidyverse)
+library(stringr)
+library(babynames)
+```
+
+Use ``'` or `"` to create strings, `"` is recommended per tidyverse style guidelines. To include a quotation mark, `\` to escape `\'` and `\"`.
+
+```{webr}
+string1 <- "This is a string"
+string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
+```
+
+## Regex
+
+## Factors
+
+In addition to base R, we till use the `{forcats}` package in the core tidyverse.
+
+```{webr}
+library(tidyverse)
+library(forcats)
+```
+
+### Basics
+
+```{webr}
+x1 <- c("Dec", "Apr", "Jan", "Mar")
+x2 <- c("Dec", "Apr", "Jam", "Mar")
+sort(x1) # sorts alphabetically, not by months. To solve this use levels() function.
+
+month_levels <- c(  # create of levels.
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
+(y1 <- factor(x1, levels = month_levels)) # create factor
+sort(y1) # Now, sorting works after using levels and any values not in the levels will be silently converted to NA
+
+y2 <- factor(x2, levels = month_levels)
+y2 # "Jam" is converted to NA because it is in the factors but not in the levels.
+sort(y2)
+
+y3 <- factor(c(1,2), labels = c("Yes", "No"))
+y3
+str(y3)
+
+levels(y3) # to access the levels of a factor.
+```
+
+`factor()` converts missing levels to NA without a warning, which is risky. 
+
+`forcats::fct()` warns if there is a value missing in the levels: whithout setting levels(), forcats::ftc() orders the levels by appearance. 
+
+```{webr}
+#| eval: false
+y2 <- forcats::fct(x2, levels = month_levels)
+# y2 
+# 
+# Error in `forcats::fct()`:
+# ! All values of `x` must appear in `levels` or `na`
+# ℹ Missing level: "Jam"
+# Backtrace:
+#  1. forcats::fct(x2, levels = month_levels)
+# Error in forcats::fct(x2, levels = month_levels) : 
+# ℹ Missing level: "Jam"
+
+y4 <- fct(c("0","1"), levels = c("1"), na = "0")
+y4
+```
+
+
+If you omit the levels, `factor()` will take them in alphabetical order, but `forcats::fct()` will order by appearance.
+
+```{webr}
+factor(x1) # orders alphabetically.
+fct(x1) # orders by appearance.
+```
+You can also create a factor when reading your data with `{webreadr}` with `col_factor()`:
+
+```{webr}
+csv <- "
+month, value
+Jan, 12
+Feb, 56
+Mar, 12
+"
+
+df <- read_csv(csv, col_types = cols(month = col_factor(month_levels)))
+df$month
+sort(df$month)
+```
+
+### General Social Survey (GSS)
+
+`forcats::gss_cat` is a sample of data from the GSS, a long-running US survey conducted by the National Opinion Research Center (NORC) at the University of Chicago.
+
+```{webr}
+forcats::gss_cat
+```
+
+When factors are stores in a tibble, their levels are not easily visible. `count()`.
+```{webr}
+gss_cat |>
+  count(race)
+```
+
+#### Exercises
+
+1. Explore the distribution of `rincome` (reported income). What makes the default bar chart hard to understand? How could you improve the plot?
+`
+```{webr}
+
+```
+
+2. What is the most common `relig` in this survey? What’s the most common `partyid``
+`
+```{webr}
+
+```
+
+3. Which `relig` does denom (denomination) apply to? How can you find out with a table? How can you find out with a visualization?
+
+```{webr}
+
+```
+
+### Modify factor order: fct_reorder() and fct_relevel()
+
+This plot presenting the average number of hours spent watching TV by religion (affiliation) is hard to read because the number of hours is not increasing or decreasing.
+ 
+```{webr}
+relig_summary <- gss_cat |>
+  group_by(relig) |>
+  summarize(
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+ggplot(relig_summary, aes(x = tvhours, y = relig)) + 
+  geom_point()
+```
+
+We may want to modify this plot by changing the order of the levels: We can use `fct_reorder()` and `fct_relevel()`.
+
+`fct_reorder()` takes three arguments: 
+1. `.f`, the factor whose levels you want to modify. 
+2. `.x`, a numeric vector that you want to use to reorder the levels. 
+3. Optionally, `.fun`, a function that’s used if there are multiple values of `.x` for each value of `.f`. The default value is median.
+
+```{webr}
+
+ggplot(relig_summary, aes(x = tvhours, y = fct_reorder(relig, tvhours))) + #reorder relig by increasing/decreasing tvhours
+  geom_point()
+```
+
+The factor-reordering can be done with `mutate()` before ggplot.
+
+```{webr}
+relig_summary |>
+  mutate(
+    relig = fct_reorder(relig, tvhours, .desc = TRUE) # default is ascending (.desc = FALSE), .desc = TRUE is descending
+  ) |>
+  ggplot(aes(x = tvhours, y = relig)) +
+  geom_point()
+```
+
+Plot how average age varies by income bracket:
+
+```{webr}
+rincome_summary <- gss_cat |>
+  group_by(rincome) |>
+  summarize(
+    age = mean(age, na.rm = TRUE),
+    n = n()
+  )
+
+ggplot(rincome_summary, aes(x = age, y = fct_reorder(rincome, age))) + 
+  geom_point()
+```
+
+`fct_reorder()` is suited for factors with arbitrary order. When factors have a natural ordering, and you want to pull to the front one level, use
+`fct_relevel()`. It takes as arguments the factor, `.f`, and then any number of levels that you want to move to the front of the line.
+
+```{webr}
+ggplot(rincome_summary, aes(x = age, y = fct_relevel(rincome, "Not applicable"))) +
+  geom_point()
+```
+
+```{webr}
+ggplot(rincome_summary, aes(x = age, y = fct_relevel(rincome, c("Not applicable", "Lt $1000")))) +
+  geom_point()
+```
+
+Another type of reordering is useful when you are coloring the lines on a plot. fct_reorder2(.f, .x, .y) reorders the factor .f by the .y values associated with the largest .x values. This makes the plot easier to read because the colors of the line at the far right of the plot will line up with the legend.
+
+```{webr}
+by_age <- gss_cat |>
+  filter(!is.na(age)) |>
+  count(age, marital) |>
+  group_by(age) |>
+  mutate(
+    prop = n / sum(n)
+  )
+
+ggplot(by_age, aes(x = age, y = prop, color = marital)) +
+  geom_line(linewidth = 1) +
+  scale_color_brewer(palette = "Set1")
+
+ggplot(by_age, aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))) + # reorder marital status by age and associated proportion.
+  geom_line(linewidth = 1) +
+  scale_color_brewer(palette = "Set1") +
+  labs(color = "marital")
+```
+
+
+In bar plots, use `fct_infreq()` to show order in decreasing frequency: it can be combined with `fct_rev()` to show order in increasing frequency.
+
+```{webr}
+gss_cat |>
+  mutate(marital = marital |> fct_infreq() |> fct_rev()) |> #this is the simplest type of reordering because it doesn’t need any extra variables. 
+  ggplot(aes(x = marital)) +
+  geom_bar()
+```
+
+#### Exercises
+
+1. There are some suspiciously high numbers in tvhours. Is the mean a good summary?
+1. For each factor in gss_cat identify whether the order of the levels is arbitrary or principled.
+1. Why did moving “Not applicable” to the front of the levels move it to the bottom of the plot?
+
+### Modify values of factor levels: `fct_recode()`
+
+`fct_recode()` takes as argument `.f` factor, and the levels to recode/rename with "new levels" on the left = "old levels" on the right. It leaves unchanged levels that are not mentioned and warn if your refer to that do not exist as "old levels".
+
+```{webr}
+gss_cat |> count(partyid)
+```
+
+```{webr}
+gss_cat |>
+  mutate(
+    partyid = fct_recode(partyid,
+      "Republican, strong"    = "Strong republican",
+      "Republican, weak"      = "Not str republican",
+      "Independent, near rep" = "Ind,near rep",
+      "Independent, near dem" = "Ind,near dem",
+      "Democrat, weak"        = "Not str democrat",
+      "Democrat, strong"      = "Strong democrat"
+    )
+  ) |>
+  count(partyid)
+```
+
+To combine groups, you can assign multiple old levels to the same new level.
+
+If you want to collapse a lot of levels, `fct_collapse()` is a useful variant of `fct_recode()`. For each new variable, you can provide a vector of old levels:
+
+```{webr}
+gss_cat |>
+  mutate(
+    partyid = fct_collapse(partyid,
+      "other" = c("No answer", "Don't know", "Other party"),
+      "rep" = c("Strong republican", "Not str republican"),
+      "ind" = c("Ind,near rep", "Independent", "Ind,near dem"),
+      "dem" = c("Not str democrat", "Strong democrat")
+    )
+  ) |>
+  count(partyid)
+```
+
+Sometimes, one may want to lump small groups together: this can be chieved with `fct_lump_*()` family of functions.
+
+`fct_lump_lowfreq()`lumps the smallest groups into "Other" category, keeping "Other" always the smallest category. 
+
+```{webr}
+gss_cat |>
+  mutate(relig = fct_lump_lowfreq(relig)) |>
+  count(relig)
+```
+
+`fct_lump_lowfreq()`can lump groups in a less useful way: `fct_lump_n()` `can` be `used` to `specify` the exact number of categories you want to keep.
+
+```{webr}
+gss_cat |>
+  mutate(relig = fct_lump_n(relig, n = 10)) |>
+  count(relig, sort = TRUE)
+```
+
+See also `fct_lump_min()` and `fct_lump_prop()`.
+
+#### Exercises
+
+1. How have the proportions of people identifying as Democrat, Republican, and Independent changed over time?
+2. How could you collapse rincome into a small set of categories?
+3. Notice there are 9 groups (excluding other) in the `fct_lump` example above. Why not 10? (Hint: type `?fct_lump`, and find the default for the argument `other_level` is “Other”.)
+
+### Ordered factors: `ordered()`
+
+Created with the ordered() function, ordered factors imply a strict ordering between levels, but don’t specify anything about the magnitude of the differences between the levels. You use ordered factors when you know there the levels are ranked, but there’s no precise numerical ranking.
+
+Ordered factors uses `<`symbols between levels when it is printed.
+
+```{webr}
+ordered(c("a", "b", "c"))
+```
+
+In both base R and the tidyverse, ordered factors behave very similarly to regular factors. There are only two places where you might notice different behavior:
+
+- If you map an ordered factor to color or fill in ggplot2, it will default to scale_color_viridis()/scale_fill_viridis(), a color scale that implies a ranking.
+- If you use an ordered predictor in a linear model, it will use “polynomial contrasts”. These are mildly useful, but you are unlikely to have heard of them unless you have a PhD in Statistics, and even then you probably don’t routinely interpret them. If you want to learn more, we recommend vignette("contrasts", package = "faux") by Lisa DeBruine.
+
+## Dates and times
+
+This section willl use the`{lubridate}` package and nyflights13 dataset in tydiverse package.
+
+Remember that most days has 365 days, but leap years have 366 days.
+```{webr}
+library(tidyverse)
+library(nyflights13)
+```
+
+## Missing values
+
+
+## Joins

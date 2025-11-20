@@ -1,0 +1,1110 @@
+---
+format: 
+  live-html:
+    css: "style-webr.css"
+    code-blocks:
+      webr: r
+webr:
+  cell-options:
+    fig-width: 5
+    fig-height: 3
+    autorun: false
+    completion: true
+    edit: true
+    eval: true
+    include: true
+    persist: true
+    warning: false
+  packages: 
+    - tidyverse
+    - palmerpenguins  # penguins dataset
+    - nycflights13    # data on flights from NY airport
+    - janitor
+    - Lahman          # basketball data
+    - usethis
+    - ggridges        # ridgline plots (extension of ggplot)
+    - rio             # import data from other software
+    - forcats # factor
+    - downlit
+    - xml2
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Introduction
+
+This is a book created from markdown and executable code.
+
+See @knuth84 for additional discussion of literate programming.
+
+```{webr}
+#pacman::p_load(
+# tidyverse,
+# palmerpenguins,  # penguins dataset
+# nycflights13,    # data on flights from NY airport
+# janitor,
+# Lahman,          # basketball data
+# usethis,
+# ggridges,        # ridgline plots (extension of ggplot)
+# rio,             # import data from other software
+# forcats # factor
+#)
+```
+
+## Visualization
+
+```{webr}
+#| edit: false 
+#| autorun: true
+#| completion: true
+
+ggplot(penguins, 
+        mapping = aes(x = bill_depth_mm, y = bill_length_mm)
+        ) +
+  geom_point(na.rm = T) +
+  geom_smooth(na.rm = T) +
+  labs(title = "Penguins", x = "Depth (mm)", y = "Length (mm)")
+```
+
+```{webr}
+palmerpenguins::penguins
+
+ggplot(penguins, 
+        mapping = aes(x = bill_depth_mm, y = bill_length_mm)
+        ) +
+  geom_point(na.rm = T) +
+  geom_smooth(na.rm = T) +
+  labs(title = "Penguins", x = "Depth (mm)", y = "Length (mm)")
+```
+
+```{webr}
+ggplot(penguins, 
+        mapping=aes(x = species, y = bill_depth_mm)
+        ) +
+  geom_boxplot()
+```
+
+```{webr}
+ggplot(penguins,
+aes(x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth()
+```
+
+```{webr}
+ggplot(data = penguins) +
+  geom_point(aes(x = flipper_length_mm, y = body_mass_g, color = island)) +
+  geom_smooth(aes(x = flipper_length_mm, y = body_mass_g),se = FALSE)
+```
+
+```{webr}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+## Data transformation
+
+### Rows
+
+```{webr}
+#| echo: false
+#| include: false
+nycflights13::flights
+
+```
+
+Had an arrival delay of two or more hours:
+
+```{webr}
+#| exercise: ex_2_1
+#| include: true
+flights |>
+  filter(arr_delay >= 120)
+```
+
+Flew to Houston (IAH or HOU):
+
+```{webr}
+#| exercise: ex_2_2
+flights  |>
+  filter(dest %in% c("IAH", "HOU"))
+```
+
+Were operated by United, American, or Delta:
+
+```{webr}
+#| exercise: ex_2_3
+flights |> 
+  filter(carrier %in% c("UA", "AA", "DL"))
+```
+
+Departed in summer (July, August, and September)
+
+```{webr}
+#| exercise: ex_2_4
+flights |> 
+  filter(month %in% c(7:9))
+```
+
+<!-- Arrived more than two hours late, but didn’t leave late -->
+
+```{webr}
+#| exercise: ex_2_5
+flights |> 
+  filter(arr_delay > 120 & dep_delay <= 0)
+```
+
+Were delayed by at least an hour, but made up over 30 minutes in flight
+
+```{webr}
+#| exercise: ex_2_6
+flights |> 
+  filter(arr_delay >= 60 & dep_delay - arr_delay > 30)
+```
+
+2.Sort flights to find the flights with longest departure delays. Find the flights that left earliest in the morning.
+
+```{webr}
+#| exercise: ex_2_7
+flights |>
+  arrange(desc(dep_delay)) |> 
+  arrange(sched_dep_time) |> 
+  relocate(dep_delay, sched_dep_time)
+```
+
+3.Sort flights to find the fastest flights. (Hint: Try including a math calculation inside of your function.)
+
+```{webr}
+#| exercise: ex_2_8
+flights |> 
+  mutate(speed = distance/(air_time/ 60)) |> 
+  arrange(desc(speed)) |> 
+  relocate(speed)
+```
+
+4.Was there a flight on every day of 2013?
+
+```{webr}
+#| exercise: ex_2_9
+flights |> 
+  filter(year == 2013) |> 
+  distinct(month, day) |> 
+  nrow()
+```
+
+**Yes!**
+
+5.Which flights traveled the farthest distance? Which traveled the least distance?
+
+```{webr}
+#| exercise: ex_2_10
+flights |>
+  filter(distance == max(distance)) 
+
+
+flights |> 
+  arrange(desc(distance)) |> 
+  relocate(distance)
+
+flights |> 
+  filter(distance == min(distance))
+
+
+flights |> 
+  arrange(distance) |> 
+  relocate(distance)
+```
+
+6.Does it matter what order you used filter() and arrange() if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.
+
+```{webr}
+#| exercise: ex_2_11
+
+```
+
+## Columns
+
+### mutate()
+
+`mutate(df, new_var = ...)`
+
+### select()
+
+```{webr}
+flights |> 
+  select(where(is.character))
+```
+
+There are a number of helper functions you can use within select():
+
+- `starts_with("abc")`: matches names that begin with “abc”.
+- `ends_with("xyz")`: matches names that end with “xyz”.
+- `contains("ijk")`: matches names that contain “ijk”.
+- `num_range("x", 1:3)`: matches x1, x2 and x3.
+
+### rename()
+
+`rename(df, new_var = old_var)` `select(df, new_var = old_var)`
+
+### relocate()
+
+### Exercices
+
+1.Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
+
+```{webr}
+#| exercise: ex_3_1
+flights |> 
+  mutate(delay = dep_time - sched_dep_time) |> 
+  relocate(delay, dep_delay)
+```
+
+2.Brainstorm as many ways as possible to select `dep_time`, `arr_time`, and from `{flights}`.
+
+```{webr}
+#| exercise: ex_3_2
+flights |> 
+  select(dep_time, dep_delay, arr_time, arr_delay)
+
+flights |> 
+  select(starts_with("dep"), starts_with("arr"))
+
+flights |>
+  select(dep_time:arr_delay, -contains("sched"))
+```
+
+3.What happens if you specify the name of the same variable multiple times in a select() call?
+
+```{webr}
+#| exercise: ex_3_3
+flights |> 
+  select(dep_time, dep_time)
+```
+
+4.What does the any_of() function do? Why might it be helpful in conjunction with this vector?
+
+```{webr}
+#| exercise: ex_3_4
+variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+
+flights |> 
+  select(any_of(variables))
+
+flights |> 
+  select(all_of(variables))
+
+#?any_of()
+#?all_of()
+```
+
+5.Does the result of running the following code surprise you? How do the select helpers deal with upper and lower case by default? How can you change that default?
+
+```{webr}
+#| exercise: ex_3_5
+flights |> select(contains("TIME"))
+```
+
+Yes, it does surprise me since the variable names are lowercase but the string in contains() is uppercase. By default, `contains()` ignores case.
+
+To change this default behavior, set `ignore.case = FALSE`.
+
+```{webr}
+#| exercise: ex_3_6
+flights |> 
+  select(contains("TIME", ignore.case = FALSE))
+#> # A tibble: 336,776 × 0
+```
+
+6.Rename air_time to air_time_min to indicate units of measurement and move it to the beginning of the data frame.
+
+```{webr}
+#| exercise: ex_3_7
+flights |> 
+  rename(air_time_min = air_time) |> 
+  relocate(air_time_min)
+
+flights |> 
+  select(air_time_min = air_time) |> 
+  relocate(air_time_min)
+
+flights |> 
+  mutate(air_time_min = air_time) |> 
+  relocate(air_time_min)
+```
+
+7.Why doesn’t the following work, and what does the error mean?
+
+```{webr}
+#| exercise: ex_3_8
+flights |> 
+  select(air_time_min = air_time)
+```
+
+```{webr}
+#| exercise: ex_3_9
+#| autorun: false
+
+flights |> 
+  select(tailnum) |> # results in a df with 1 column tailnum.
+  arrange(arr_delay) # column arr_dealy does not exist in new df.
+```
+
+## The pipe
+
+## Groups
+
+### group_by()
+
+### summarize()
+
+### The slice_functions
+
+There are five handy functions that allow you extract specific rows within each group:
+
+- `df |> slice_head(n = 1)` takes the first row from each group.
+- `df |> slice_tail(n = 1)` takes the last row in each group.
+- `df |> slice_min(x, n = 1)` takes the row with the smallest value of column x.
+- `df |> slice_max(x, n = 1)` takes the row with the largest value of column x.
+- `df |> slice_sample(n = 1)` takes one random row.
+
+You can vary n to select more than one row, or instead of n =, you can use prop = 0.1 to select (e.g.) 10% of the rows in each group.
+
+\[OBS\] By default, `slice_min()` and `slice_max()` **keep tied values** so n = 1 means give us all rows with the highest value. If you want exactly one row per group you can set `with_ties = FALSE`.
+
+### Grouping by multiple variables
+
+Group of each date:
+
+```{webr}
+daily <- flights |>  
+  group_by(year, month, day)
+daily
+```
+
+When you summarize a tibble grouped by more than one variable, each summary peels off the last group. In hindsight, this wasn’t a great way to make this function work, but it’s difficult to change without breaking existing code. To make it obvious what’s happening, dplyr displays a message that tells you how you can change this behavior:
+
+```{webr}
+daily_flights <- daily |> 
+  summarize(n = n())
+```
+
+```{webr}
+daily_flights <- daily |> 
+  summarize(n = n(), 
+            .groups = "drop_last"
+            )
+```
+
+### Ungrouping with ungroup()
+
+```{webr}
+daily |> 
+  ungroup()
+```
+
+```{webr}
+daily |> 
+  ungroup() |>
+  summarize(
+    avg_delay = mean(dep_delay, na.rm = TRUE), 
+    flights = n()
+  )
+```
+
+### .by argument for grouping
+
+```{webr}
+flights |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE), 
+    n = n(),
+    .by = month
+  )
+```
+
+Or if you want to group by multiple variables:
+
+```{webr}
+flights |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE), 
+    n = n(),
+    .by = c(origin, dest)
+  )
+```
+
+\[OBS.\] `.by` works with all verbs and has the advantage that you don’t need to use the .groups argument to suppress the grouping message or ungroup() when you’re done.
+
+#### Exercises
+
+1.Which carrier has the worst average delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights \|\> group_by(carrier, dest) \|\> summarize(n()))
+
+```{webr}
+flights |> 
+  relocate(carrier, contains("delay"), dest) |> 
+  mutate(avg_delay = mean(c(dep_delay,arr_delay), na.rm = TRUE)
+        ) |> 
+  arrange(desc(avg_delay), carrier, dest) |> 
+  relocate (avg_delay, carrier, dest)
+
+flights |> 
+  summarize(
+    avg_delay = mean(c(dep_delay,arr_delay), na.rm = TRUE),
+    n = n(),
+    .by = c("carrier", "dest")
+    ) |> 
+  arrange(desc(avg_delay))
+
+```
+
+2.Find the flights that are most delayed upon departure from each destination.
+
+```{webr}
+flights |> 
+  group_by(dest) |> 
+  arrange(desc(dep_delay)) |> 
+  relocate(dest,dep_delay)
+```
+
+3.How do delays vary over the course of the day. Illustrate your answer with a plot.
+
+```{webr}
+flights |> 
+  ggplot() +
+  geom_point(aes(x = dep_time, y = dep_delay ))
+
+flights |> 
+  ggplot() +
+  geom_area(aes(x = sched_dep_time, y = dep_delay ))
+```
+
+4.What happens if you supply a negative n to slice_min() and friends?
+
+```{webr}
+#| eval: false
+flights |> 
+  slice_min(dep_delay, n=-1))
+```
+
+5.Explain what `count()` does in terms of the dplyr verbs you just learned. What does the `sort` argument to `count()` do?
+
+If sort = TRUE, the largest group is shown at the top.
+
+```{webr}
+flights |> 
+  count(carrier)
+
+flights |> 
+  count(carrier, sort = TRUE )
+```
+
+6.Suppose we have the following tiny data frame:
+
+```{webr}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+df
+```
+
+a.  
+
+```{webr}
+df |>
+  group_by(y)
+```
+
+b.  
+
+```{webr}
+df |>
+  arrange(y)
+```
+
+c.  
+
+```{webr}
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+```
+
+d.  
+
+```{webr}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+```
+
+e.  
+
+```{webr}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+```
+
+f.  
+
+```{webr}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+
+
+```
+
+## Case study: aggregates and sample size
+
+```{webr}
+batters <- Lahman::Batting |> 
+  group_by(playerID) |> 
+  summarize(
+    performance = sum(H, na.rm = TRUE) / sum(AB, na.rm = TRUE),
+    n = sum(AB, na.rm = TRUE)
+  )
+batters
+```
+
+```{webr}
+
+```
+
+### Summary
+
+To manipulate rows: `filter()`, `arrarege()`
+
+For columns: `select()`, `mutate()`, `group()`, and `summarize()`.
+
+## Workflow: code style
+
+1. names
+2. spaces: Put spaces on either side of mathematical operators apart from `^` (i.e. `+`, `-`, `==`, `<`, …), and around the assignment operator (`<-`).
+3. Pipes: `|>` should always have a space before it and should typically be the last thing on a line.
+   1. If the function you’re piping into has named arguments (like [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) or [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html)), put each argument on a new line.
+   2. If the function doesn’t have named arguments (like [`select()`](https://dplyr.tidyverse.org/reference/select.html) or [`filter()`](https://dplyr.tidyverse.org/reference/filter.html)), keep everything on one line unless it doesn’t fit, in which case you should put each argument on its own line.
+   3. After the first step of the pipeline, indent each line by two spaces. RStudio will automatically put the spaces in for you after a line break following a `|>` . If you’re putting each argument on its own line, indent by an extra two spaces. Make sure `)` is on its own line, and un-indented to match the horizontal position of the function name.
+   4. Be wary of writing very long pipes, say longer than 10-15 lines. Try to break them up into smaller sub-tasks, giving each task an informative name.
+
+```{webr}
+# Strive for 
+flights |>  
+  group_by(tailnum) |> 
+  summarize(
+    delay = mean(arr_delay, na.rm = TRUE),
+    n = n()
+  )
+```
+
+4.The same basic rules that apply to the pipe also apply to `{ggplot2}`; just treat `+` the same way as `|>`. Again, if you can’t fit all of the arguments to a function on to a single line, put each argument on its own line:
+
+```{webr}
+flights |> 
+  group_by(dest) |> 
+  summarize(
+    distance = mean(distance),
+    speed = mean(distance / air_time, na.rm = TRUE)
+  ) |> 
+  ggplot(aes(x = distance, y = speed)) +
+  geom_smooth(
+    method = "loess",
+    span = 0.5,
+    se = FALSE, 
+    color = "white", 
+    linewidth = 4
+  ) +
+  geom_point()
+```
+
+5.**Sectioning comments**
+
+### Exercises
+
+```{webr}
+flights|>
+  filter(dest=="IAH")|>
+  group_by(year,month,day)|>
+  summarize(
+    n=n(),
+    delay=mean(arr_delay, na.rm=TRUE)
+  ) |>
+    filter(n>10)
+
+flights|>
+  filter(
+    carrier=="UA",
+    dest%in%c("IAH","HOU"),
+    sched_dep_time>0900,
+    sched_arr_time<2000
+  ) |>
+  group_by(flight)|>
+  summarize(
+    delay=mean(arr_delay,na.rm=TRUE),
+    cancelled=sum(is.na(arr_delay)), n=n()
+  ) |>
+  filter(n>10)
+```
+
+## Data tyding
+
+```{webr}
+tidyr::table1
+table1
+table2
+table3
+```
+
+### Exercises
+
+1.  
+
+```{webr}
+table1 # country, year, nr cases, total pop
+table2 # country, year, type (case/pop), nr cases
+table3 # country, year, rate (nr cases per pop).
+```
+
+2.  
+
+```{webr}
+rate_tab1 <- table1 %>% 
+  group_by(country, year) %>% 
+  summarise(rate = cases/population*10000)
+rate_tab1
+
+table2 |>
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  ) |> 
+  mutate(rate = cases / population * 10000)
+
+```
+
+## Data import
+
+We focus on importing CSV file. A CSV file looks like this: The first row, commonly called the **header row**, gives the column names, and the following six rows provide the data. The columns are separated, aka delimited, by commas.
+
+```{webr}
+students <- read_csv("https://pos.it/r4ds-students-csv")
+
+```
+
+By default, [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) only recognizes empty strings (`""`) in this dataset as `NA`s, we want it to also recognize the character string `"N/A"`.
+
+```{webr}
+students <- read_csv("https://pos.it/r4ds-students-csv", na = c("N/A", ""))
+students
+```
+
+```{webr}
+students |> 
+  rename(
+    student_id = `Student ID`,
+    full_name = `Full Name`
+  )
+```
+
+An alternative approach is to use [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html) to use some heuristics to turn them all into snake case at once:
+
+```{webr}
+students <- read_csv("https://pos.it/r4ds-students-csv", na = c("N/A", ""))
+
+students |> 
+  janitor::clean_names()
+
+```
+
+Another common task after reading in data is to consider variable types. For example, `meal_plan` is a categorical variable, which in R should be represented as a factor:
+
+```{webr}
+students <- read_csv("https://pos.it/r4ds-students-csv", na = c("N/A", ""))
+
+students |> 
+  janitor::clean_names() |> 
+  mutate(
+    meal_plan = factor(meal_plan),
+    age = parse_number(if_else(age == "five", "5", age)) # age as chr type because one obs is typed out "five" instead of 5.
+  )
+```
+
+### Other arguments
+
+Usually, [`read_csv()`](#0) uses **the first line** of the data for the **column names**. If a few fist line include other text othen the columns names, you can use `skip = n` to skip the first `n` lines or use `comment = "#"` to drop all lines that start with (e.g.) `#`:
+
+```{webr}
+read_csv(
+  "a,b,c
+  1,2,3
+  4,5,6"
+)
+
+read_csv(
+  "The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3"
+)
+
+read_csv(
+  "The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3",
+  skip = 2
+)
+
+read_csv(
+  "# A comment I want to skip
+  x,y,z
+  1,2,3"
+)
+
+read_csv(
+  "# A comment I want to skip
+  x,y,z
+  1,2,3",
+  comment = "#"
+)
+
+
+read_csv(
+  "# A comment I want to skip
+  x,y,z
+  1,2,3",
+  skip = 1
+)
+
+```
+
+```{webr}
+read_csv(
+  "1,2,3
+  4,5,6",
+  col_names = FALSE  # tell read_csv() not to treat the first row as headings and instead label them sequentially from X1 to Xn
+)
+```
+
+```{webr}
+read_csv(
+  "1,2,3
+  4,5,6",
+  col_names = c("x", "y", "z") # pass col_names a character vector which will be used as the column names
+)
+```
+
+### Other file types
+
+Once you’ve mastered [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html), it’s just a matter of knowing which function to reach for:
+
+- [`read_csv2()`](https://readr.tidyverse.org/reference/read_delim.html) reads semicolon-separated files. These use `;` instead of `,` to separate fields and are common in countries that use `,` as the decimal marker.
+
+- [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html) reads tab-delimited files.
+
+- [`read_delim()`](https://readr.tidyverse.org/reference/read_delim.html) reads in files with any delimiter, attempting to automatically guess the delimiter if you don’t specify it.
+
+- [`read_fwf()`](https://readr.tidyverse.org/reference/read_fwf.html) reads fixed-width files. You can specify fields by their widths with [`fwf_widths()`](https://readr.tidyverse.org/reference/read_fwf.html) or by their positions with [`fwf_positions()`](https://readr.tidyverse.org/reference/read_fwf.html).
+
+- [`read_table()`](https://readr.tidyverse.org/reference/read_table.html) reads a common variation of fixed-width files where columns are separated by white space.
+
+- [`read_log()`](https://readr.tidyverse.org/reference/read_log.html) reads Apache-style log files.
+
+### Exercises
+
+1
+
+2, 3
+
+```{webr}
+#read_csv
+#read_tsv
+#read_fwf
+```
+
+```{webr}
+read_csv("x,y\n1,'a,b'", quote = "\'")
+```
+
+```{webr}
+read_csv("a,b\n1,2,3\n4,5,6") # 2 colums column headers, but 3 columns
+read_csv("a,b,c\n1,2\n1,2,3,4")
+
+read_csv("a,b\n\"1")
+read_csv("a,b\n1,2\na,b")
+read_csv2("a;b\n1;3")
+```
+
+6
+
+```{webr include=TRUE}
+annoying <- tibble(
+   `1` = 1:10,
+   `2` = `1` * 2 + rnorm(length(`1`))
+) 
+
+v1 <- annoying |> 
+  select("1")
+v1
+
+ggplot(annoying, aes(y = `1`, x = `2`)) +
+  geom_point()
+
+annoying <-  tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+
+ggplot(annoying, aes(x = `2`, y = `1`)) +
+  geom_point()
+
+annoying |>
+  mutate(`3` = `2` / `1`) |>
+  rename(
+    "one" = `1`,
+    "two" = `2`,
+    "three" = `3`
+  )
+  
+
+ tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+  ) |>  mutate(
+    one = `1`,
+    two = `2`,
+    three = `2`/ `1`
+    ) |> 
+  ggplot() +
+  geom_point(aes(x = two, y = one))
+ 
+```
+
+```{webr}
+annoying
+```
+
+## Getting help
+
+## Visualize
+
+#### Layers
+
+```{webr}
+vignette("ggplot2-specs")
+```
+
+```{webr}
+ggplot2::mpg
+
+names(mpg)
+```
+
+```{webr}
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, shape = class)) + #aes() can mapp to a max 6 shapes
+  geom_point()
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, size = class)) +
+  geom_point()
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, alpha = class)) +
+  geom_point()
+```
+
+You can also set the visual properties of your geom manually as an argument of your geom function (*outside* of [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html)) instead of relying on a variable mapping to determine the appearance
+
+```{webr}
+mpg |> 
+  ggplot(aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class))
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy)) +
+  geom_point(aes(alpha = class))
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, size = class)) +
+  geom_point()
+
+mpg |> 
+  ggplot(aes(x = displ, y = hwy, alpha = class)) +
+  geom_point(shape = 4, size = 1 )
+```
+
+### Exercises
+
+1
+
+```{webr}
+mpg |> 
+  ggplot(aes(x = displ, y = hwy)) +
+  geom_point(color = "pink", shape = 17)
+```
+
+2
+
+3
+
+Stroke aesthetic controls the size of the edge/border of the points for shapes 21-24 (filled circle, square, triangle, and diamond).
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy, color = displ < 5)) + 
+  geom_point()
+
+
+
+
+```
+
+### Geometric objects
+
+Not every aesthetic works with every geom. You could set the shape of a point, but you couldn’t set the “shape” of a line.
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() +
+  geom_smooth(aes(linetype = drv))  # linetype aesthetic to a categorical variable to draw multiple objects.
+
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() +
+  geom_smooth(aes(group = drv), show.legend = TRUE) # you can set the group aesthetic to a categorical variable to draw multiple objects
+```
+
+If you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings *for that layer only*. This makes it possible to display different aesthetics in different layers. You can use the same idea to specify different `data` for each layer.
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_point(
+    data = mpg |> filter(class == "2seater"), 
+    color = "red"
+  ) +
+  geom_point(
+    data = mpg |> filter(class == "2seater"), 
+    shape = "circle open", size = 3, color = "red"
+  )
+```
+
+```{webr}
+
+ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
+  geom_density_ridges(alpha = 0.5, show.legend = FALSE)
+
+ggplot(mpg, aes(x = hwy, y = drv)) +
+  geom_density_ridges(
+    aes(fill = drv, 
+        color = drv, 
+        alpha = 0.5
+    ),
+    show.legend = FALSE
+  )
+```
+
+### Exercises
+
+```{webr}
+mpg |>  
+arrange(hwy) |> 
+  ggplot(aes(x = year, y = hwy)) +
+  geom_path()
+
+```
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_smooth(aes(color = drv), show.legend = FALSE, se = FALSE)
+```
+
+```{webr}
+#1
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(shape = "circle", size = 1, color = "black") +
+  geom_smooth(show.legend = FALSE, se = FALSE)
+```
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(shape = "circle", size = 1, color = "black") +
+  geom_smooth(aes(group = drv), show.legend = FALSE, se = FALSE)
+```
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point(shape = 20, size = 2) +
+  geom_smooth(se = FALSE)
+```
+
+```{webr}
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(shape = 20, size = 3, aes(color = drv)) +
+  geom_smooth(se = FALSE)
+
+```
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(shape = 20, size = 3, aes(color = drv)) +
+  geom_smooth(aes(linetype = drv), se = FALSE)
+```
+
+```{webr}
+mpg |> 
+  ggplot(aes(displ, hwy, color = drv)) +
+    geom_point(shape = "circle", size = 1)
+```
+
+#### Facets
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_wrap(~cyl)
+```
+
+To facet your plot with the combination of two variables, switch from [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) to [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html)
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_grid(drv ~ cyl)
+```
+
+By default each of the facets share the same scale and range for x and y axes. This is useful when you want to compare data across facets but it can be limiting when you want to visualize the relationship within each facet better. To have different axis scales across both rows and columns, set the `scales` argument in a faceting function to `"free"`:  `"free_x"` will allow for different scales across rows, and `"free_y"` will allow for different scales across columns.
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(drv ~ cyl, scales = "free_y")
+```
+
+```{webr}
+
+```

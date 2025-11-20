@@ -1,0 +1,332 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "My R4DS notes using webr",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "1.1 Visualization\nThis is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "4  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "intro.html#data-transformation",
+    "href": "intro.html#data-transformation",
+    "title": "1  Introduction",
+    "section": "1.2 Data transformation",
+    "text": "1.2 Data transformation\n\n1.2.1 Rows\n\n\n\n\n\n\n\n\nHad an arrival delay of two or more hours:\n\n\n\n\n\n\n\n\nFlew to Houston (IAH or HOU):\n\n\n\n\n\n\n\n\nWere operated by United, American, or Delta:\n\n\n\n\n\n\n\n\nDeparted in summer (July, August, and September)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWere delayed by at least an hour, but made up over 30 minutes in flight\n\n\n\n\n\n\n\n\n2.Sort flights to find the flights with longest departure delays. Find the flights that left earliest in the morning.\n\n\n\n\n\n\n\n\n3.Sort flights to find the fastest flights. (Hint: Try including a math calculation inside of your function.)\n\n\n\n\n\n\n\n\n4.Was there a flight on every day of 2013?\n\n\n\n\n\n\n\n\nYes!\n5.Which flights traveled the farthest distance? Which traveled the least distance?\n\n\n\n\n\n\n\n\n6.Does it matter what order you used filter() and arrange() if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#columns",
+    "href": "intro.html#columns",
+    "title": "1  Introduction",
+    "section": "1.3 Columns",
+    "text": "1.3 Columns\n\n1.3.1 mutate()\nmutate(df, new_var = ...)\n\n\n1.3.2 select()\n\n\n\n\n\n\n\n\nThere are a number of helper functions you can use within select():\n\nstarts_with(\"abc\"): matches names that begin with “abc”.\nends_with(\"xyz\"): matches names that end with “xyz”.\ncontains(\"ijk\"): matches names that contain “ijk”.\nnum_range(\"x\", 1:3): matches x1, x2 and x3.\n\n\n\n1.3.3 rename()\nrename(df, new_var = old_var) select(df, new_var = old_var)\n\n\n1.3.4 relocate()\n\n\n1.3.5 Exercices\n1.Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?\n\n\n\n\n\n\n\n\n2.Brainstorm as many ways as possible to select dep_time, arr_time, and from {flights}.\n\n\n\n\n\n\n\n\n3.What happens if you specify the name of the same variable multiple times in a select() call?\n\n\n\n\n\n\n\n\n4.What does the any_of() function do? Why might it be helpful in conjunction with this vector?\n\n\n\n\n\n\n\n\n5.Does the result of running the following code surprise you? How do the select helpers deal with upper and lower case by default? How can you change that default?\n\n\n\n\n\n\n\n\nYes, it does surprise me since the variable names are lowercase but the string in contains() is uppercase. By default, contains() ignores case.\nTo change this default behavior, set ignore.case = FALSE.\n\n\n\n\n\n\n\n\n6.Rename air_time to air_time_min to indicate units of measurement and move it to the beginning of the data frame.\n\n\n\n\n\n\n\n\n7.Why doesn’t the following work, and what does the error mean?",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#the-pipe",
+    "href": "intro.html#the-pipe",
+    "title": "1  Introduction",
+    "section": "1.4 The pipe",
+    "text": "1.4 The pipe",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#groups",
+    "href": "intro.html#groups",
+    "title": "1  Introduction",
+    "section": "1.5 Groups",
+    "text": "1.5 Groups\n\n1.5.1 group_by()\n\n\n1.5.2 summarize()\n\n\n1.5.3 The slice_functions\nThere are five handy functions that allow you extract specific rows within each group:\n\ndf |&gt; slice_head(n = 1) takes the first row from each group.\ndf |&gt; slice_tail(n = 1) takes the last row in each group.\ndf |&gt; slice_min(x, n = 1) takes the row with the smallest value of column x.\ndf |&gt; slice_max(x, n = 1) takes the row with the largest value of column x.\ndf |&gt; slice_sample(n = 1) takes one random row.\n\nYou can vary n to select more than one row, or instead of n =, you can use prop = 0.1 to select (e.g.) 10% of the rows in each group.\n[OBS] By default, slice_min() and slice_max() keep tied values so n = 1 means give us all rows with the highest value. If you want exactly one row per group you can set with_ties = FALSE.\n\n\n1.5.4 Grouping by multiple variables\nGroup of each date:\n\n\n\n\n\n\n\n\nWhen you summarize a tibble grouped by more than one variable, each summary peels off the last group. In hindsight, this wasn’t a great way to make this function work, but it’s difficult to change without breaking existing code. To make it obvious what’s happening, dplyr displays a message that tells you how you can change this behavior:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.5.5 Ungrouping with ungroup()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.5.6 .by argument for grouping\n\n\n\n\n\n\n\n\nOr if you want to group by multiple variables:\n\n\n\n\n\n\n\n\n[OBS.] .by works with all verbs and has the advantage that you don’t need to use the .groups argument to suppress the grouping message or ungroup() when you’re done.\n\n1.5.6.1 Exercises\n1.Which carrier has the worst average delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights |&gt; group_by(carrier, dest) |&gt; summarize(n()))\n\n\n\n\n\n\n\n\n2.Find the flights that are most delayed upon departure from each destination.\n\n\n\n\n\n\n\n\n3.How do delays vary over the course of the day. Illustrate your answer with a plot.\n\n\n\n\n\n\n\n\n4.What happens if you supply a negative n to slice_min() and friends?\n\n\n\n\n\n\n\n\n5.Explain what count() does in terms of the dplyr verbs you just learned. What does the sort argument to count() do?\nIf sort = TRUE, the largest group is shown at the top.\n\n\n\n\n\n\n\n\n6.Suppose we have the following tiny data frame:",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#case-study-aggregates-and-sample-size",
+    "href": "intro.html#case-study-aggregates-and-sample-size",
+    "title": "1  Introduction",
+    "section": "1.6 Case study: aggregates and sample size",
+    "text": "1.6 Case study: aggregates and sample size\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.6.1 Summary\nTo manipulate rows: filter(), arrarege()\nFor columns: select(), mutate(), group(), and summarize().",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#workflow-code-style",
+    "href": "intro.html#workflow-code-style",
+    "title": "1  Introduction",
+    "section": "1.7 Workflow: code style",
+    "text": "1.7 Workflow: code style\n\nnames\nspaces: Put spaces on either side of mathematical operators apart from ^ (i.e. +, -, ==, &lt;, …), and around the assignment operator (&lt;-).\nPipes: |&gt; should always have a space before it and should typically be the last thing on a line.\n\nIf the function you’re piping into has named arguments (like mutate() or summarize()), put each argument on a new line.\nIf the function doesn’t have named arguments (like select() or filter()), keep everything on one line unless it doesn’t fit, in which case you should put each argument on its own line.\nAfter the first step of the pipeline, indent each line by two spaces. RStudio will automatically put the spaces in for you after a line break following a |&gt; . If you’re putting each argument on its own line, indent by an extra two spaces. Make sure ) is on its own line, and un-indented to match the horizontal position of the function name.\nBe wary of writing very long pipes, say longer than 10-15 lines. Try to break them up into smaller sub-tasks, giving each task an informative name.\n\n\n\n\n\n\n\n\n\n\n4.The same basic rules that apply to the pipe also apply to {ggplot2}; just treat + the same way as |&gt;. Again, if you can’t fit all of the arguments to a function on to a single line, put each argument on its own line:\n\n\n\n\n\n\n\n\n5.Sectioning comments\n\n1.7.1 Exercises",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#data-tyding",
+    "href": "intro.html#data-tyding",
+    "title": "1  Introduction",
+    "section": "1.8 Data tyding",
+    "text": "1.8 Data tyding\n\n\n\n\n\n\n\n\n\n1.8.1 Exercises",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#data-import",
+    "href": "intro.html#data-import",
+    "title": "1  Introduction",
+    "section": "1.9 Data import",
+    "text": "1.9 Data import\nWe focus on importing CSV file. A CSV file looks like this: The first row, commonly called the header row, gives the column names, and the following six rows provide the data. The columns are separated, aka delimited, by commas.\n\n\n\n\n\n\n\n\nBy default, read_csv() only recognizes empty strings (\"\") in this dataset as NAs, we want it to also recognize the character string \"N/A\".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAn alternative approach is to use janitor::clean_names() to use some heuristics to turn them all into snake case at once:\n\n\n\n\n\n\n\n\nAnother common task after reading in data is to consider variable types. For example, meal_plan is a categorical variable, which in R should be represented as a factor:\n\n\n\n\n\n\n\n\n\n1.9.1 Other arguments\nUsually, read_csv() uses the first line of the data for the column names. If a few fist line include other text othen the columns names, you can use skip = n to skip the first n lines or use comment = \"#\" to drop all lines that start with (e.g.) #:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.9.2 Other file types\nOnce you’ve mastered read_csv(), it’s just a matter of knowing which function to reach for:\n\nread_csv2() reads semicolon-separated files. These use ; instead of , to separate fields and are common in countries that use , as the decimal marker.\nread_tsv() reads tab-delimited files.\nread_delim() reads in files with any delimiter, attempting to automatically guess the delimiter if you don’t specify it.\nread_fwf() reads fixed-width files. You can specify fields by their widths with fwf_widths() or by their positions with fwf_positions().\nread_table() reads a common variation of fixed-width files where columns are separated by white space.\nread_log() reads Apache-style log files.\n\n\n\n1.9.3 Exercises\n1\n2, 3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n6",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#getting-help",
+    "href": "intro.html#getting-help",
+    "title": "1  Introduction",
+    "section": "1.10 Getting help",
+    "text": "1.10 Getting help",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#visualize",
+    "href": "intro.html#visualize",
+    "title": "1  Introduction",
+    "section": "1.11 Visualize",
+    "text": "1.11 Visualize\n\n1.11.0.1 Layers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYou can also set the visual properties of your geom manually as an argument of your geom function (outside of aes()) instead of relying on a variable mapping to determine the appearance\n\n\n\n\n\n\n\n\n\n\n1.11.1 Exercises\n1\n\n\n\n\n\n\n\n\n2\n3\nStroke aesthetic controls the size of the edge/border of the points for shapes 21-24 (filled circle, square, triangle, and diamond).\n\n\n\n\n\n\n\n\n\n\n1.11.2 Geometric objects\nNot every aesthetic works with every geom. You could set the shape of a point, but you couldn’t set the “shape” of a line.\n\n\n\n\n\n\n\n\nIf you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings for that layer only. This makes it possible to display different aesthetics in different layers. You can use the same idea to specify different data for each layer.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.11.3 Exercises\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.11.3.1 Facets\n\n\n\n\n\n\n\n\nTo facet your plot with the combination of two variables, switch from facet_wrap() to facet_grid()\n\n\n\n\n\n\n\n\nBy default each of the facets share the same scale and range for x and y axes. This is useful when you want to compare data across facets but it can be limiting when you want to visualize the relationship within each facet better. To have different axis scales across both rows and columns, set the scales argument in a faceting function to \"free\":  \"free_x\" will allow for different scales across rows, and \"free_y\" will allow for different scales across columns.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html",
+    "href": "04-transform.html",
+    "title": "2  Transform",
+    "section": "",
+    "text": "2.1 Logical vectors",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#numbers",
+    "href": "04-transform.html#numbers",
+    "title": "2  Transform",
+    "section": "2.2 Numbers",
+    "text": "2.2 Numbers",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#strings",
+    "href": "04-transform.html#strings",
+    "title": "2  Transform",
+    "section": "2.3 Strings",
+    "text": "2.3 Strings",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#regex",
+    "href": "04-transform.html#regex",
+    "title": "2  Transform",
+    "section": "2.4 Regex",
+    "text": "2.4 Regex",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#factors",
+    "href": "04-transform.html#factors",
+    "title": "2  Transform",
+    "section": "2.5 Factors",
+    "text": "2.5 Factors\nIn addition to base R, we till use the {forcats} package in the core tidyverse.\n\n\n\n\n\n\n\n\n\n2.5.1 Basics\n\n\n\n\n\n\n\n\nfactor() converts missing levels to NA without a warning, which is risky.\nforcats::fct() warns if there is a value missing in the levels: whithout setting levels(), forcats::ftc() orders the levels by appearance.\n\n\n\n\n\n\n\n\nIf you omit the levels, factor() will take them in alphabetical order, but forcats::fct() will order by appearance.\n\n\n\n\n\n\n\n\nYou can also create a factor when reading your data with {webreadr} with col_factor():\n\n\n\n\n\n\n\n\n\n\n2.5.2 General Social Survey (GSS)\nforcats::gss_cat is a sample of data from the GSS, a long-running US survey conducted by the National Opinion Research Center (NORC) at the University of Chicago.\n\n\n\n\n\n\n\n\nWhen factors are stores in a tibble, their levels are not easily visible. count().\n\n\n\n\n\n\n\n\n\n2.5.2.1 Exercises\n\nExplore the distribution of rincome (reported income). What makes the default bar chart hard to understand? How could you improve the plot? `\n\n\n\n\n\n\n\n\n\n\nWhat is the most common relig in this survey? What’s the most common partyid``\n\n\n\n\n\n\n\n\n\n\nWhich relig does denom (denomination) apply to? How can you find out with a table? How can you find out with a visualization?\n\n\n\n\n\n\n\n\n\n\n\n\n2.5.3 Modify factor order: fct_reorder() and fct_relevel()\nThis plot presenting the average number of hours spent watching TV by religion (affiliation) is hard to read because the number of hours is not increasing or decreasing.\n\n\n\n\n\n\n\n\nWe may want to modify this plot by changing the order of the levels: We can use fct_reorder() and fct_relevel().\nfct_reorder() takes three arguments: 1. .f, the factor whose levels you want to modify. 2. .x, a numeric vector that you want to use to reorder the levels. 3. Optionally, .fun, a function that’s used if there are multiple values of .x for each value of .f. The default value is median.\n\n\n\n\n\n\n\n\nThe factor-reordering can be done with mutate() before ggplot.\n\n\n\n\n\n\n\n\nPlot how average age varies by income bracket:\n\n\n\n\n\n\n\n\nfct_reorder() is suited for factors with arbitrary order. When factors have a natural ordering, and you want to pull to the front one level, use fct_relevel(). It takes as arguments the factor, .f, and then any number of levels that you want to move to the front of the line.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAnother type of reordering is useful when you are coloring the lines on a plot. fct_reorder2(.f, .x, .y) reorders the factor .f by the .y values associated with the largest .x values. This makes the plot easier to read because the colors of the line at the far right of the plot will line up with the legend.\n\n\n\n\n\n\n\n\nIn bar plots, use fct_infreq() to show order in decreasing frequency: it can be combined with fct_rev() to show order in increasing frequency.\n\n\n\n\n\n\n\n\n\n2.5.3.1 Exercises\n\nThere are some suspiciously high numbers in tvhours. Is the mean a good summary?\nFor each factor in gss_cat identify whether the order of the levels is arbitrary or principled.\nWhy did moving “Not applicable” to the front of the levels move it to the bottom of the plot?\n\n\n\n\n2.5.4 Modify values of factor levels: fct_recode()\nfct_recode() takes as argument .f factor, and the levels to recode/rename with “new levels” on the left = “old levels” on the right. It leaves unchanged levels that are not mentioned and warn if your refer to that do not exist as “old levels”.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTo combine groups, you can assign multiple old levels to the same new level.\nIf you want to collapse a lot of levels, fct_collapse() is a useful variant of fct_recode(). For each new variable, you can provide a vector of old levels:\n\n\n\n\n\n\n\n\nSometimes, one may want to lump small groups together: this can be chieved with fct_lump_*() family of functions.\nfct_lump_lowfreq()lumps the smallest groups into “Other” category, keeping “Other” always the smallest category.\n\n\n\n\n\n\n\n\nfct_lump_lowfreq()can lump groups in a less useful way: fct_lump_n() can be used to specify the exact number of categories you want to keep.\n\n\n\n\n\n\n\n\nSee also fct_lump_min() and fct_lump_prop().\n\n2.5.4.1 Exercises\n\nHow have the proportions of people identifying as Democrat, Republican, and Independent changed over time?\nHow could you collapse rincome into a small set of categories?\nNotice there are 9 groups (excluding other) in the fct_lump example above. Why not 10? (Hint: type ?fct_lump, and find the default for the argument other_level is “Other”.)\n\n\n\n\n2.5.5 Ordered factors: ordered()\nCreated with the ordered() function, ordered factors imply a strict ordering between levels, but don’t specify anything about the magnitude of the differences between the levels. You use ordered factors when you know there the levels are ranked, but there’s no precise numerical ranking.\nOrdered factors uses &lt;symbols between levels when it is printed.\n\n\n\n\n\n\n\n\nIn both base R and the tidyverse, ordered factors behave very similarly to regular factors. There are only two places where you might notice different behavior:\n\nIf you map an ordered factor to color or fill in ggplot2, it will default to scale_color_viridis()/scale_fill_viridis(), a color scale that implies a ranking.\nIf you use an ordered predictor in a linear model, it will use “polynomial contrasts”. These are mildly useful, but you are unlikely to have heard of them unless you have a PhD in Statistics, and even then you probably don’t routinely interpret them. If you want to learn more, we recommend vignette(“contrasts”, package = “faux”) by Lisa DeBruine.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#dates-and-times",
+    "href": "04-transform.html#dates-and-times",
+    "title": "2  Transform",
+    "section": "2.6 Dates and times",
+    "text": "2.6 Dates and times\nThis section willl use the{lubridate} package and nyflights13 dataset in tydiverse package.\nRemember that most days has 365 days, but leap years have 366 days.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#missing-values",
+    "href": "04-transform.html#missing-values",
+    "title": "2  Transform",
+    "section": "2.7 Missing values",
+    "text": "2.7 Missing values",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "04-transform.html#joins",
+    "href": "04-transform.html#joins",
+    "title": "2  Transform",
+    "section": "2.8 Joins",
+    "text": "2.8 Joins",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Transform</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html",
+    "href": "01-intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "1.1 Visualization\nThis is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#data-transformation",
+    "href": "01-intro.html#data-transformation",
+    "title": "1  Introduction",
+    "section": "1.2 Data transformation",
+    "text": "1.2 Data transformation\n\n1.2.1 Rows\n\n\n\n\n\n\n\n\nHad an arrival delay of two or more hours:\n\n\n\n\n\n\n\n\nFlew to Houston (IAH or HOU):\n\n\n\n\n\n\n\n\nWere operated by United, American, or Delta:\n\n\n\n\n\n\n\n\nDeparted in summer (July, August, and September)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWere delayed by at least an hour, but made up over 30 minutes in flight\n\n\n\n\n\n\n\n\n2.Sort flights to find the flights with longest departure delays. Find the flights that left earliest in the morning.\n\n\n\n\n\n\n\n\n3.Sort flights to find the fastest flights. (Hint: Try including a math calculation inside of your function.)\n\n\n\n\n\n\n\n\n4.Was there a flight on every day of 2013?\n\n\n\n\n\n\n\n\nYes!\n5.Which flights traveled the farthest distance? Which traveled the least distance?\n\n\n\n\n\n\n\n\n6.Does it matter what order you used filter() and arrange() if you’re using both? Why/why not? Think about the results and how much work the functions would have to do.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#columns",
+    "href": "01-intro.html#columns",
+    "title": "1  Introduction",
+    "section": "1.3 Columns",
+    "text": "1.3 Columns\n\n1.3.1 mutate()\nmutate(df, new_var = ...)\n\n\n1.3.2 select()\n\n\n\n\n\n\n\n\nThere are a number of helper functions you can use within select():\n\nstarts_with(\"abc\"): matches names that begin with “abc”.\nends_with(\"xyz\"): matches names that end with “xyz”.\ncontains(\"ijk\"): matches names that contain “ijk”.\nnum_range(\"x\", 1:3): matches x1, x2 and x3.\n\n\n\n1.3.3 rename()\nrename(df, new_var = old_var) select(df, new_var = old_var)\n\n\n1.3.4 relocate()\n\n\n1.3.5 Exercices\n1.Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?\n\n\n\n\n\n\n\n\n2.Brainstorm as many ways as possible to select dep_time, arr_time, and from {flights}.\n\n\n\n\n\n\n\n\n3.What happens if you specify the name of the same variable multiple times in a select() call?\n\n\n\n\n\n\n\n\n4.What does the any_of() function do? Why might it be helpful in conjunction with this vector?\n\n\n\n\n\n\n\n\n5.Does the result of running the following code surprise you? How do the select helpers deal with upper and lower case by default? How can you change that default?\n\n\n\n\n\n\n\n\nYes, it does surprise me since the variable names are lowercase but the string in contains() is uppercase. By default, contains() ignores case.\nTo change this default behavior, set ignore.case = FALSE.\n\n\n\n\n\n\n\n\n6.Rename air_time to air_time_min to indicate units of measurement and move it to the beginning of the data frame.\n\n\n\n\n\n\n\n\n7.Why doesn’t the following work, and what does the error mean?",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#the-pipe",
+    "href": "01-intro.html#the-pipe",
+    "title": "1  Introduction",
+    "section": "1.4 The pipe",
+    "text": "1.4 The pipe",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#groups",
+    "href": "01-intro.html#groups",
+    "title": "1  Introduction",
+    "section": "1.5 Groups",
+    "text": "1.5 Groups\n\n1.5.1 group_by()\n\n\n1.5.2 summarize()\n\n\n1.5.3 The slice_functions\nThere are five handy functions that allow you extract specific rows within each group:\n\ndf |&gt; slice_head(n = 1) takes the first row from each group.\ndf |&gt; slice_tail(n = 1) takes the last row in each group.\ndf |&gt; slice_min(x, n = 1) takes the row with the smallest value of column x.\ndf |&gt; slice_max(x, n = 1) takes the row with the largest value of column x.\ndf |&gt; slice_sample(n = 1) takes one random row.\n\nYou can vary n to select more than one row, or instead of n =, you can use prop = 0.1 to select (e.g.) 10% of the rows in each group.\n[OBS] By default, slice_min() and slice_max() keep tied values so n = 1 means give us all rows with the highest value. If you want exactly one row per group you can set with_ties = FALSE.\n\n\n1.5.4 Grouping by multiple variables\nGroup of each date:\n\n\n\n\n\n\n\n\nWhen you summarize a tibble grouped by more than one variable, each summary peels off the last group. In hindsight, this wasn’t a great way to make this function work, but it’s difficult to change without breaking existing code. To make it obvious what’s happening, dplyr displays a message that tells you how you can change this behavior:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.5.5 Ungrouping with ungroup()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.5.6 .by argument for grouping\n\n\n\n\n\n\n\n\nOr if you want to group by multiple variables:\n\n\n\n\n\n\n\n\n[OBS.] .by works with all verbs and has the advantage that you don’t need to use the .groups argument to suppress the grouping message or ungroup() when you’re done.\n\n1.5.6.1 Exercises\n1.Which carrier has the worst average delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about flights |&gt; group_by(carrier, dest) |&gt; summarize(n()))\n\n\n\n\n\n\n\n\n2.Find the flights that are most delayed upon departure from each destination.\n\n\n\n\n\n\n\n\n3.How do delays vary over the course of the day. Illustrate your answer with a plot.\n\n\n\n\n\n\n\n\n4.What happens if you supply a negative n to slice_min() and friends?\n\n\n\n\n\n\n\n\n5.Explain what count() does in terms of the dplyr verbs you just learned. What does the sort argument to count() do?\nIf sort = TRUE, the largest group is shown at the top.\n\n\n\n\n\n\n\n\n6.Suppose we have the following tiny data frame:",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#case-study-aggregates-and-sample-size",
+    "href": "01-intro.html#case-study-aggregates-and-sample-size",
+    "title": "1  Introduction",
+    "section": "1.6 Case study: aggregates and sample size",
+    "text": "1.6 Case study: aggregates and sample size\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.6.1 Summary\nTo manipulate rows: filter(), arrarege()\nFor columns: select(), mutate(), group(), and summarize().",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#workflow-code-style",
+    "href": "01-intro.html#workflow-code-style",
+    "title": "1  Introduction",
+    "section": "1.7 Workflow: code style",
+    "text": "1.7 Workflow: code style\n\nnames\nspaces: Put spaces on either side of mathematical operators apart from ^ (i.e. +, -, ==, &lt;, …), and around the assignment operator (&lt;-).\nPipes: |&gt; should always have a space before it and should typically be the last thing on a line.\n\nIf the function you’re piping into has named arguments (like mutate() or summarize()), put each argument on a new line.\nIf the function doesn’t have named arguments (like select() or filter()), keep everything on one line unless it doesn’t fit, in which case you should put each argument on its own line.\nAfter the first step of the pipeline, indent each line by two spaces. RStudio will automatically put the spaces in for you after a line break following a |&gt; . If you’re putting each argument on its own line, indent by an extra two spaces. Make sure ) is on its own line, and un-indented to match the horizontal position of the function name.\nBe wary of writing very long pipes, say longer than 10-15 lines. Try to break them up into smaller sub-tasks, giving each task an informative name.\n\n\n\n\n\n\n\n\n\n\n4.The same basic rules that apply to the pipe also apply to {ggplot2}; just treat + the same way as |&gt;. Again, if you can’t fit all of the arguments to a function on to a single line, put each argument on its own line:\n\n\n\n\n\n\n\n\n5.Sectioning comments\n\n1.7.1 Exercises",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#data-tyding",
+    "href": "01-intro.html#data-tyding",
+    "title": "1  Introduction",
+    "section": "1.8 Data tyding",
+    "text": "1.8 Data tyding\n\n\n\n\n\n\n\n\n\n1.8.1 Exercises",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#data-import",
+    "href": "01-intro.html#data-import",
+    "title": "1  Introduction",
+    "section": "1.9 Data import",
+    "text": "1.9 Data import\nWe focus on importing CSV file. A CSV file looks like this: The first row, commonly called the header row, gives the column names, and the following six rows provide the data. The columns are separated, aka delimited, by commas.\n\n\n\n\n\n\n\n\nBy default, read_csv() only recognizes empty strings (\"\") in this dataset as NAs, we want it to also recognize the character string \"N/A\".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAn alternative approach is to use janitor::clean_names() to use some heuristics to turn them all into snake case at once:\n\n\n\n\n\n\n\n\nAnother common task after reading in data is to consider variable types. For example, meal_plan is a categorical variable, which in R should be represented as a factor:\n\n\n\n\n\n\n\n\n\n1.9.1 Other arguments\nUsually, read_csv() uses the first line of the data for the column names. If a few fist line include other text othen the columns names, you can use skip = n to skip the first n lines or use comment = \"#\" to drop all lines that start with (e.g.) #:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.9.2 Other file types\nOnce you’ve mastered read_csv(), it’s just a matter of knowing which function to reach for:\n\nread_csv2() reads semicolon-separated files. These use ; instead of , to separate fields and are common in countries that use , as the decimal marker.\nread_tsv() reads tab-delimited files.\nread_delim() reads in files with any delimiter, attempting to automatically guess the delimiter if you don’t specify it.\nread_fwf() reads fixed-width files. You can specify fields by their widths with fwf_widths() or by their positions with fwf_positions().\nread_table() reads a common variation of fixed-width files where columns are separated by white space.\nread_log() reads Apache-style log files.\n\n\n\n1.9.3 Exercises\n1\n2, 3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n6",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#getting-help",
+    "href": "01-intro.html#getting-help",
+    "title": "1  Introduction",
+    "section": "1.10 Getting help",
+    "text": "1.10 Getting help",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "01-intro.html#visualize",
+    "href": "01-intro.html#visualize",
+    "title": "1  Introduction",
+    "section": "1.11 Visualize",
+    "text": "1.11 Visualize\n\n1.11.0.1 Layers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYou can also set the visual properties of your geom manually as an argument of your geom function (outside of aes()) instead of relying on a variable mapping to determine the appearance\n\n\n\n\n\n\n\n\n\n\n1.11.1 Exercises\n1\n\n\n\n\n\n\n\n\n2\n3\nStroke aesthetic controls the size of the edge/border of the points for shapes 21-24 (filled circle, square, triangle, and diamond).\n\n\n\n\n\n\n\n\n\n\n1.11.2 Geometric objects\nNot every aesthetic works with every geom. You could set the shape of a point, but you couldn’t set the “shape” of a line.\n\n\n\n\n\n\n\n\nIf you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings for that layer only. This makes it possible to display different aesthetics in different layers. You can use the same idea to specify different data for each layer.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.11.3 Exercises\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1.11.3.1 Facets\n\n\n\n\n\n\n\n\nTo facet your plot with the combination of two variables, switch from facet_wrap() to facet_grid()\n\n\n\n\n\n\n\n\nBy default each of the facets share the same scale and range for x and y axes. This is useful when you want to compare data across facets but it can be limiting when you want to visualize the relationship within each facet better. To have different axis scales across both rows and columns, set the scales argument in a faceting function to \"free\":  \"free_x\" will allow for different scales across rows, and \"free_y\" will allow for different scales across columns.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  }
+]

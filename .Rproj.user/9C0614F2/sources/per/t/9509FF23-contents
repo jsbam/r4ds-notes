@@ -1,0 +1,35 @@
+---
+title: "Import"
+format: 
+  live-html:
+    css: "style-webr.css"
+webr:
+  cell-options:
+    fig-width: 5
+    fig-height: 3
+    autorun: false
+    completion: true
+    edit: true
+    eval: true
+    include: true
+    persist: true
+    warning: false
+  packages: 
+    - tidyverse
+    - palmerpenguins  # penguins dataset
+    - nycflights13    # data on flights from NY airport
+    - janitor
+    - Lahman          # basketball data
+    - usethis
+    - ggridges        # ridgline plots (extension of ggplot)
+    - rio             # import data from other software
+    - forcats # factor
+    - downlit
+    - xml2
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{webr}
+
+```
