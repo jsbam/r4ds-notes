@@ -3,7 +3,8 @@ format:
   live-html:
     css: "style-webr.css"
     code-blocks:
-      webr: r
+      webr:
+        engine: r
 webr:
   cell-options:
     fig-width: 5

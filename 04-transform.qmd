@@ -25,25 +25,7 @@ webr:
     - forcats # factor
     - downlit
     - xml2
-    - arrow
-    - babynames
-    - curl
-    - duckdb
-    - gapminder
-    - ggrepel
-    - ggridges
-    - ggthemes
-    - hexbin
-    - janitor
-    - Lahman
-    - leaflet
-    - maps
-    - nycflights13
-    - openxlsx
-    - palmerpenguins
-    - repurrrsive
-    - tidymodels
-    - writexl
+    - babynames     # baby names dataset - strings
 ---
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
@@ -55,24 +37,171 @@ webr:
 
 ## Strings
 
-```{webr}
+### Creating strings, escapes and raw strings
+
+```{r}
 # install.packages(
-#   c("arrow", "babynames", "curl", "duckdb", "gapminder", 
-#     "ggrepel", "ggridges", "ggthemes", "hexbin", "janitor", "Lahman", 
-#     "leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins", 
+#   c("arrow", "babynames", "curl", "duckdb", "gapminder",
+#     "ggrepel", "ggridges", "ggthemes", "hexbin", "janitor", "Lahman",
+#     "leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins",
 #     "repurrrsive", "tidymodels", "writexl")
 #   )
+conflicted::conflict_prefer("filter", "dplyr")
 library(tidyverse)
-library(stringr)
 library(babynames)
 ```
 
-Use ``'` or `"` to create strings, `"` is recommended per tidyverse style guidelines. To include a quotation mark, `\` to escape `\'` and `\"`.
+Use `'` or `"` to create strings, `"` is recommended per tidyverse style guide except when there are multiple quotes in a string. To include a literal single or double quote, use `\` to escape `\'` and `\"`. `\` is also used to escape special characters like new line `\n` or tab `\t`, `\\` for backslash itself. See `?Quotes` for all special characters.
+
+```{r}
+double_quote <- "\"" # or '"'
+single_quote <- '\'' # or "'"
+backslash <- "\\"
+```
+
+> [!note]
+> The printed representation of strings is different from the string itself. To see the row content of a string, use `str_vew()`.
+
+:::{.callout-note}
+
+The printed representation of strings is different from the string itself. The printed string object shows the escapes. To see the row content of a string, use `str_vew()`.
+
+```{r}
+x <- c(single_quote, double_quote, backslash)
+x
+str_view(x)
+```
+
+:::
+
+When you habve many escapes `\` in a string, so calles [leaning toothpick syndrome](https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome) you can use **raw strings**.
+
+```{r}
+tricky <- "double_quote <- \"\\\"\" # or '\"'
+single_quote <- '\\'' # or \"'\""
+str_view(tricky)
+```
+
+```{r}
+tricky_raw <- r"(double_quote <- "\"" # or '"'
+single_quote <- '\'' # or "'")"
+str_view(tricky_raw)
+```
+
+A raw string starts with `r"(` and ends with `)"`, and everything in between is taken literally, including quotes and backslashes. If the string `)"`, you can use `r"[ ]"`, or `r"{ }"`, or inserting any number of dashes to make the opening and closing delimiters unique, e.g. `r"--( )--"` or `r"---( )---"`.
+
+:::{.callout-note}
+
+`str_view()` uses curly braces for tabs `{\t}` to make them more visible.
 
 ```{webr}
-string1 <- "This is a string"
-string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
+x <- c("one\ntwo", "one\ttwo", "\u00b5", "\U0001f604")
+x
+str_view(x)
 ```
+
+:::
+
+### Exercises
+
+:::{.panel-tabset}
+
+## Question 1
+
+```
+Create strings that contain the following values:
+
+  1. He said "That's amazing!"
+
+  2. \a\b\c\d
+
+  3. \\\\\\
+```
+
+## Solutions
+
+```{webr}
+# 1. He said "That's amazing!"
+str1 <- "He said \"That's amazing!\""
+str1
+str1 <- 'He said "That\'s amazing!"'
+str1
+```
+
+```{webr}
+# 2. \a\b\c\d
+str2 <- "\\a\\b\\c\\d"
+str2
+str2 <- r"(\a\b\c\d)"
+str2
+```
+
+```{webr}
+# 3. \\\\\\
+str3 <- r"(\\\\\\)"
+```
+
+:::
+
+:::{.panel-tabset}
+
+## Question 2
+
+Create the string in your R session and print it. What happens to the special “\u00a0”? How does str_view() display it? Can you do a little googling to figure out what this special character is?
+
+```
+x <- "This\u00a0is\u00a0tricky"
+```
+
+## Solutions
+
+```{webr}
+# 1. He said "That's amazing!"
+x <- "This\u00a0is\u00a0tricky"
+x
+str_view(x)
+```
+
+## Hint
+
+```
+`\u00a0` is a non-breaking space character.
+```
+
+:::
+
+### strings from data: str_c(), str_glue(), str_flatten()
+
+`str_c()` :
+
+1. takes any number of vectors and returns a character vector similar to `base::paste0()`.
+
+```{webr}
+str_c("x", "y", "z")
+str_c("Hello ", c("John", "Susan"))
+```
+
+2. obeys tidyverse rule for recycling and propagating missing values `NA`: is designed to be used with `mutate()`.
+
+```{webr}
+df <- tibble(name = c("Flora", "David", "Terra", NA))
+df |> mutate(greeting = str_c("Hi ", name, "!"))
+```
+
+3. if missing values should display in another way, use `coalesce()` inside or outside `str_c()`.
+
+```{webr}
+coalesce(c("one", "two", NA), "good") # coalesce replaces NA with "good"
+
+df |>
+  mutate(
+    greeting1 = str_c("Hi ", coalesce(name, "you"), "!"),
+    greeting2 = coalesce(str_c("Hi ", name, "!"), "Hi!")
+  )
+```
+
+`str_glue()`:
+
 
 ## Regex
 

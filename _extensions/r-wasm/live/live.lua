@@ -1,4 +1,14 @@
-local tinyyaml = require "resources/tinyyaml"
+local function load_tinyyaml()
+  local tinyyaml_path = quarto.utils.resolve_path("resources/tinyyaml.lua")
+  local chunk = loadfile(tinyyaml_path)
+  if chunk then
+    return chunk()
+  else
+    error("Failed to load tinyyaml from: " .. tinyyaml_path)
+  end
+end
+
+local tinyyaml = load_tinyyaml()
 
 local cell_options = {
   webr = { eval = true },

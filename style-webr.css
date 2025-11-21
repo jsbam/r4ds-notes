@@ -83,6 +83,8 @@ h6 {
 }
 /* Code blocks - slightly tighter */
 code, pre {
+  font-family: 'Fira Code', sans-serif;
+  font-size: 0.875rem !important;
   line-height: 1.4;
 }
 /* Navigation and sidebar elements */
@@ -96,7 +98,7 @@ code, pre {
 .cm-content, .cm-editor, .cm-focused, .cm-line, .cm-activeLine,
 [class*="cm-"], [class*="qwebr-"], 
 div[class*="cm-"] *, div[class*="qwebr-"] *,
-div.sourceCode, div.sourceCode.r, .sourceCode {
+div.sourceCode, div.sourceCode.r, .sourceCode div.tabset-1-1 {
   font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code',  'Source Code Pro', Menlo, Monaco, monospace !important;
   font-size: 0.875rem !important;
 }

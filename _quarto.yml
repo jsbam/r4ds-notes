@@ -3,7 +3,7 @@ project:
 
 book:
   title: "My R4DS notes using webr"
-  author: "Norah Jones"
+  author: "Jacques Shebehe"
   date: "7/31/2025"
   chapters:
     - index.qmd
@@ -41,6 +41,25 @@ webr:
     - forcats # factor
     - downlit
     - xml2
+    - arrow
+    - babynames
+    - curl
+    - duckdb
+    - gapminder
+    - ggrepel
+    - ggridges
+    - ggthemes
+    - hexbin
+    - janitor
+    - Lahman
+    - leaflet
+    - maps
+    - nycflights13
+    - openxlsx
+    - palmerpenguins
+    - repurrrsive
+    - tidymodels
+    - writexl
 engine: knitr
 editor: source 
 
