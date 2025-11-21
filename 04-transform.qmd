@@ -299,7 +299,7 @@ gss_cat |>
 #### Exercises
 
 1. Explore the distribution of `rincome` (reported income). What makes the default bar chart hard to understand? How could you improve the plot?
-`
+
 ```{webr}
 
 ```
