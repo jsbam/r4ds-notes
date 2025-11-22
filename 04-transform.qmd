@@ -59,9 +59,6 @@ single_quote <- '\'' # or "'"
 backslash <- "\\"
 ```
 
-> [!note]
-> The printed representation of strings is different from the string itself. To see the row content of a string, use `str_vew()`.
-
 :::{.callout-note}
 
 The printed representation of strings is different from the string itself. The printed string object shows the escapes. To see the row content of a string, use `str_vew()`.
@@ -74,7 +71,7 @@ str_view(x)
 
 :::
 
-When you habve many escapes `\` in a string, so calles [leaning toothpick syndrome](https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome) you can use **raw strings**.
+When you habve many escapes `\` in a string, so called [leaning toothpick syndrome](https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome), you can use **raw strings**.
 
 ```{r}
 tricky <- "double_quote <- \"\\\"\" # or '\"'
@@ -172,7 +169,9 @@ str_view(x)
 
 ### strings from data: str_c(), str_glue(), str_flatten()
 
-`str_c()` :
+### str_c()
+
+`str_c()`:
 
 1. takes any number of vectors and returns a character vector similar to `base::paste0()`.
 
@@ -200,8 +199,9 @@ df |>
   )
 ```
 
-`str_glue()`:
+### str_glue()
 
+### str_flatten()
 
 ## Regex
 
@@ -221,9 +221,20 @@ x1 <- c("Dec", "Apr", "Jan", "Mar")
 x2 <- c("Dec", "Apr", "Jam", "Mar")
 sort(x1) # sorts alphabetically, not by months. To solve this use levels() function.
 
-month_levels <- c(  # create of levels.
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+month_levels <- c(
+  # create of levels.
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
 )
 (y1 <- factor(x1, levels = month_levels)) # create factor
 sort(y1) # Now, sorting works after using levels and any values not in the levels will be silently converted to NA
@@ -232,7 +243,7 @@ y2 <- factor(x2, levels = month_levels)
 y2 # "Jam" is converted to NA because it is in the factors but not in the levels.
 sort(y2)
 
-y3 <- factor(c(1,2), labels = c("Yes", "No"))
+y3 <- factor(c(1, 2), labels = c("Yes", "No"))
 y3
 str(y3)
 
@@ -246,17 +257,17 @@ levels(y3) # to access the levels of a factor.
 ```{webr}
 #| eval: false
 y2 <- forcats::fct(x2, levels = month_levels)
-# y2 
-# 
+# y2
+#
 # Error in `forcats::fct()`:
 # ! All values of `x` must appear in `levels` or `na`
 # ℹ Missing level: "Jam"
 # Backtrace:
 #  1. forcats::fct(x2, levels = month_levels)
-# Error in forcats::fct(x2, levels = month_levels) : 
+# Error in forcats::fct(x2, levels = month_levels) :
 # ℹ Missing level: "Jam"
 
-y4 <- fct(c("0","1"), levels = c("1"), na = "0")
+y4 <- fct(c("0", "1"), levels = c("1"), na = "0")
 y4
 ```
 
@@ -328,7 +339,7 @@ relig_summary <- gss_cat |>
     n = n()
   )
 
-ggplot(relig_summary, aes(x = tvhours, y = relig)) + 
+ggplot(relig_summary, aes(x = tvhours, y = relig)) +
   geom_point()
 ```
 
@@ -366,7 +377,7 @@ rincome_summary <- gss_cat |>
     n = n()
   )
 
-ggplot(rincome_summary, aes(x = age, y = fct_reorder(rincome, age))) + 
+ggplot(rincome_summary, aes(x = age, y = fct_reorder(rincome, age))) +
   geom_point()
 ```
 
@@ -374,12 +385,18 @@ ggplot(rincome_summary, aes(x = age, y = fct_reorder(rincome, age))) +
 `fct_relevel()`. It takes as arguments the factor, `.f`, and then any number of levels that you want to move to the front of the line.
 
 ```{webr}
-ggplot(rincome_summary, aes(x = age, y = fct_relevel(rincome, "Not applicable"))) +
+ggplot(
+  rincome_summary,
+  aes(x = age, y = fct_relevel(rincome, "Not applicable"))
+) +
   geom_point()
 ```
 
 ```{webr}
-ggplot(rincome_summary, aes(x = age, y = fct_relevel(rincome, c("Not applicable", "Lt $1000")))) +
+ggplot(
+  rincome_summary,
+  aes(x = age, y = fct_relevel(rincome, c("Not applicable", "Lt $1000")))
+) +
   geom_point()
 ```
 
@@ -398,7 +415,10 @@ ggplot(by_age, aes(x = age, y = prop, color = marital)) +
   geom_line(linewidth = 1) +
   scale_color_brewer(palette = "Set1")
 
-ggplot(by_age, aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))) + # reorder marital status by age and associated proportion.
+ggplot(
+  by_age,
+  aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))
+) + # reorder marital status by age and associated proportion.
   geom_line(linewidth = 1) +
   scale_color_brewer(palette = "Set1") +
   labs(color = "marital")
@@ -409,7 +429,7 @@ In bar plots, use `fct_infreq()` to show order in decreasing frequency: it can b
 
 ```{webr}
 gss_cat |>
-  mutate(marital = marital |> fct_infreq() |> fct_rev()) |> #this is the simplest type of reordering because it doesn’t need any extra variables. 
+  mutate(marital = marital |> fct_infreq() |> fct_rev()) |> #this is the simplest type of reordering because it doesn’t need any extra variables.
   ggplot(aes(x = marital)) +
   geom_bar()
 ```
@@ -431,13 +451,14 @@ gss_cat |> count(partyid)
 ```{webr}
 gss_cat |>
   mutate(
-    partyid = fct_recode(partyid,
-      "Republican, strong"    = "Strong republican",
-      "Republican, weak"      = "Not str republican",
+    partyid = fct_recode(
+      partyid,
+      "Republican, strong" = "Strong republican",
+      "Republican, weak" = "Not str republican",
       "Independent, near rep" = "Ind,near rep",
       "Independent, near dem" = "Ind,near dem",
-      "Democrat, weak"        = "Not str democrat",
-      "Democrat, strong"      = "Strong democrat"
+      "Democrat, weak" = "Not str democrat",
+      "Democrat, strong" = "Strong democrat"
     )
   ) |>
   count(partyid)
@@ -450,7 +471,8 @@ If you want to collapse a lot of levels, `fct_collapse()` is a useful variant of
 ```{webr}
 gss_cat |>
   mutate(
-    partyid = fct_collapse(partyid,
+    partyid = fct_collapse(
+      partyid,
       "other" = c("No answer", "Don't know", "Other party"),
       "rep" = c("Strong republican", "Not str republican"),
       "ind" = c("Ind,near rep", "Independent", "Ind,near dem"),
