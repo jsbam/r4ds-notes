@@ -201,6 +201,14 @@ df |>
 
 ### str_glue()
 
+`str_glue()` from the {glue} package allows the use of `{}` to mix fixed and variable strings. This improves readability compared to `str_c()`. But `str_glue()` does not propagate missing values `NA` by default, so you may need to use `coalesce()`.
+
+```{webr}
+df |> mutate(greeting = str_glue("Hi {name}!"))
+
+```
+
+
 ### str_flatten()
 
 ## Regex
