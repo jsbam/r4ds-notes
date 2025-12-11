@@ -183,8 +183,13 @@ str_c("Hello ", c("John", "Susan"))
 2. obeys tidyverse rule for recycling and propagating missing values `NA`: is designed to be used with `mutate()`.
 
 ```{webr}
+#| autorun: true 
 df <- tibble(name = c("Flora", "David", "Terra", NA))
-df |> mutate(greeting = str_c("Hi ", name, "!"))
+```
+
+```{webr}
+df |> 
+  mutate(greeting = str_c("Hi ", name, "!"))
 ```
 
 3. if missing values should display in another way, use `coalesce()` inside or outside `str_c()`.
@@ -203,13 +208,257 @@ df |>
 
 `str_glue()` from the {glue} package allows the use of `{}` to mix fixed and variable strings. This improves readability compared to `str_c()`. But `str_glue()` does not propagate missing values `NA` by default, so you may need to use `coalesce()`.
 
+To escape `{` or `}`, use double braces `{{` or `}}`.
+
 ```{webr}
-df |> mutate(greeting = str_glue("Hi {name}!"))
+df |> 
+  mutate(greeting = str_glue("Hi {name}!"))
+
+df |> 
+  mutate(greeting = str_glue("}}{{Hi {name}!}}"))
 
 ```
 
 
 ### str_flatten()
+
+- `str_c()` and `str_glue()` work well with `mutate()` because their output is the same length as their inputs.
+- `str_flatten()` takes a character vector, combines each element of the vector and returns a single string: it works well with `summarize()`.
+  
+```{webr}
+ft <- str_flatten(c("x", "y", "z"))
+str(ft)
+ct <- str_c(c("x", "y", "z"))
+str(ct)
+gl <- str_glue("x", "y", "z")
+str(gl)
+
+str_flatten(c("x", "y", "z"), ", ")
+
+str_flatten(c("x", "y", "z"), ", ", last = ", and ")
+```
+
+:::{.details open="true"}
+:::{.summary}
+**str_flatten()**
+:::
+
+```r
+str_flatten(
+  string, 
+  collapse = "", 
+  last = NULL, 
+  na.rm = FALSE
+)
+
+str_flatten_comma(
+  string,
+  last = NULL,
+  na.rm = FALSE
+)
+```
+:::
+
+An exemple of how `str_flatten()` works well with `summarise()`:
+
+```{webr}
+#| autorun: true
+df <- tribble(
+  ~ name, ~ fruit,
+  "Carmen", "banana",
+  "Carmen", "apple",
+  "Marvin", "nectarine",
+  "Terence", "cantaloupe",
+  "Terence", "papaya",
+  "Terence", "mandarin"
+)
+```
+
+```{webr}
+df |> 
+  summarise(
+    fruits = str_flatten(fruit, ", "),
+    .by = name
+  )
+  
+df |>
+  group_by(name) |>
+  summarise(
+    fruits = str_flatten(fruit, ", ")
+  )
+df |>
+  group_by(name) |>
+  summarise(
+    fruits = str_flatten_comma(fruit)
+  )
+```
+
+### Exercises
+
+:::{.panel-tabset}
+
+## Question 1
+
+```
+Compare and contrast the results of paste0() with str_c() for the following inputs:
+```
+
+```{r}
+#| eval: false
+str_c("hi ", NA)
+str_c(letters[1:2], letters[1:3])
+```
+
+## Solutions
+
+```{webr}
+
+str_c("hi ", NA) # concatenates "hi " with NA to produce NA
+paste0("hi ", NA) # paste0 "hi" with NA to produce "hiNA"
+paste("hi ", NA)  # paste "hi" with NA to produce "hi NA" with a (default) space
+
+str_c(letters[1:2], letters[1:3])
+paste0(letters[1:2], letters[1:4])
+```
+
+:::
+
+:::{.panel-tabset}
+
+## Question 2
+
+````
+What’s the difference between `paste()` and `paste0()?` How can you recreate the equivalent of `paste()` with `str_c()`?
+````
+
+## Solutions
+
+```{webr}
+# Try here!
+
+```
+
+## Hint
+
+```
+paste (..., sep = " ", collapse = NULL, recycle0 = FALSE)
+
+paste0(...,            collapse = NULL, recycle0 = FALSE)
+```
+
+:::
+
+:::{.panel-tabset}
+
+## Question 3
+
+````
+Convert the following expressions from str_c() to str_glue() or vice versa:
+a. `str_c("The price of ", food, " is ", price)`
+b. `str_glue("I'm {age} years old and live in {country}")`
+c. `str_c("\\section{", title, "}")`
+````
+
+## Solutions
+
+```{webr}
+# a.
+str_glue("The price of {food} is {price}")
+
+# b.
+str_c("I'm ", age, " years old and live in ", country)
+
+# c.
+str_glue("\\section{{{title}}}")
+
+```
+
+:::
+
+###  data from strings: 
+
+If multiple variables are crammed into a single string, you can use four tydr functions to separate them:
+
+- `separate_longer_delim(col, delim)` : creates new rows -- `delim` splits string with delimiter e.g. `", "` or `" "`
+
+- `separate_longer_position(col, width)` : creates new rows -- `position` splits string at specified widths e.g. `c(3, 2)`
+
+- `separate_wider_delim(col, delim, names)` : creates new columns
+
+- `separate_wider_position(col, widths)` : creates new columns
+
+>[!Tips]
+> Look at these too:
+> `str_split()`, `str_split_fixed()`, `str_extract()`, and `str_match()`.
+>
+
+### separate_longer_delim() and separate_longer_position()
+
+```{webr}
+df1 <- tibble(x = c("a,b,c", "d,e", "f"))
+df1 |> 
+  separate_longer_delim(x, delim = ",")
+```
+
+```{webr}
+df2 <- tibble(x = c("1211", "131", "21"))
+df2 |> 
+  separate_longer_position(x, width = 1)
+```
+
+### separate_wider_delim() and separate_wider_position()
+
+Here `x` object is made up of a code, an edition, and a year separated by `"."`.
+
+```{webr}
+df3 <- tibble(x = c("a10.1.2022", "b10.2.2011", "e15.1.2015"))
+df3
+df3 |> 
+  separate_wider_delim(
+    x,
+    delim = ".",
+    names = c("code", "edition", "year")
+  )
+```
+
+If a specific is not useful, you can use an `NA` to omit it from the results:
+
+```{webr}
+df3 |> 
+  separate_wider_delim(
+    x,
+    delim = ".",
+    names = c("code", NA, "year")
+  )
+```
+
+`separate_wider_position()` works a little differently: its arguments are **the string**, **widths** (of each column). `widths = c(name=value, name=value, etc)` **a named integer vector**, where _the name gives the name of the new column_, and _the value is the number of characters it occupies_. You can omit values from the output by not naming them:
+
+```{webr}
+df4 <- tibble(x = c("202215TX", "202122LA", "202325CA")) 
+df4 |> 
+  separate_wider_position(
+    x,
+    widths = c(year = 4, age = 2, state = 2)
+  )
+```
+
+
+### Diagnosing widening problems
+
+`separate_wider_delim()` requires a fixed and known set of columns. If some rows don't have the expected number of pieces, the function has 2 arguments `too_few` and `too_many` to handle these problems.
+
+```{webr}
+df <- tibble(a = c("1-1-1", "1-1-2", "1-3", "1-3-2", "1"))
+df
+
+df |> 
+  separate_wider_delim(
+    a,
+    delim = "-",
+    names = c("x", "y", "z")
+  )
+```
 
 ## Regex
 

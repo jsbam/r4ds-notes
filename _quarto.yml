@@ -62,6 +62,6 @@ webr:
     - writexl
 engine: knitr
 editor: source 
-
+filters: [details]
 
 
