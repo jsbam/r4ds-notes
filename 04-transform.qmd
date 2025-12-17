@@ -46,8 +46,11 @@ webr:
 #     "leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins",
 #     "repurrrsive", "tidymodels", "writexl")
 #   )
-conflicted::conflict_prefer("filter", "dplyr")
 library(tidyverse)
+conflicted::conflicts_prefer(
+  dplyr::filter(),
+  dplyr::lag(),
+)
 library(babynames)
 ```
 
@@ -144,9 +147,12 @@ str3 <- r"(\\\\\\)"
 
 ## Question 2
 
-Create the string in your R session and print it. What happens to the special “\u00a0”? How does str_view() display it? Can you do a little googling to figure out what this special character is?
-
 ```
+Create the string in your R session and print it. 
+What happens to the special “\u00a0”? 
+How does str_view() display it? 
+Can you do a little googling to figure out what this special character is?
+
 x <- "This\u00a0is\u00a0tricky"
 ```
 
@@ -446,7 +452,7 @@ df4 |>
 
 ### Diagnosing widening problems
 
-`separate_wider_delim()` requires a fixed and known set of columns. If some rows don't have the expected number of pieces, the function has 2 arguments `too_few` and `too_many` to handle these problems.
+`separate_wider_delim()` requires a fixed and known set of columns. If some rows don't have the expected (equal) number of pieces, the function reports an error (). The function has 2 arguments `too_few` and `too_many` to handle these problems.
 
 ```{webr}
 df <- tibble(a = c("1-1-1", "1-1-2", "1-3", "1-3-2", "1"))
@@ -459,6 +465,37 @@ df |>
     names = c("x", "y", "z")
   )
 ```
+
+
+
+### Non-English text
+
+Regarding non-English text, there are challenges one may face: **endoding**, **letter variations**, and **locale-dependent functions**.
+
+```{r}
+charToRaw("Hadley")
+```
+
+Each of these hexadecimal numbers represents one letter. The mapping from hexadecimal numbers to letters is called an encoding. In this case the encoding is called ASCII. There are two different encoding in Europe, Latin1 and Latin2. But fortunately, today there is one standard that is supported almost everywhere: UTF-8 that can code about every character used by humans incl. symbols and emoji. {readr} uses UTF-8 everywhere. UTF-8 is good default but it will fail for data produced by older older systems. When this happens your strings will look weird.
+
+```{r}
+x1 <- "text\nEl Ni\xf1o was particularly bad this year"
+read_csv(x1)$text
+
+x2 <- "text\n\x82\xb1\x82\xf1\x82\xc9\x82\xbf\x82\xcd"
+read_csv(x2)$text
+```
+
+To read this, specify the encoding with `locale()` argument of `read_csv()`.
+
+```{r}
+read_csv(x1, locale = locale(encoding = "Latin1"))$text
+
+read_csv(x2, locale = locale(encoding = "Shift-JIS"))$text
+```
+
+To find the encoding, use `readr::guess_encoding()` to help figure out. You may need to try a few before finding the right one.
+
 
 ## Regex
 
