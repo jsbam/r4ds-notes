@@ -18,6 +18,10 @@ bibliography: references.bib
 format: 
   live-html:
     css: "style-webr.css"
+    theme:
+      light: "cosmo"
+      dark: "cyborg"
+
 webr:
   cell-options:
     fig-width: 5

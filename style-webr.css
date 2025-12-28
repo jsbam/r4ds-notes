@@ -112,3 +112,14 @@ button, .qwebr-button-run {
 #qwebr-status-message-area {
   font-family: 'Inter', sans-serif;
 }
+
+
+.tab-content p {
+  font-family: 'Fira Code', monospace;
+}
+
+.code-annotation-container-grid span {
+  font-family: 'Fira Code', monospace;
+  
+
+}
