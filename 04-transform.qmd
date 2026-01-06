@@ -26,6 +26,7 @@ webr:
     - downlit
     - xml2
     - babynames     # baby names dataset - strings
+    - gt            # gt tables
 ---
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
@@ -62,7 +63,7 @@ single_quote <- '\'' # or "'"
 backslash <- "\\"
 ```
 
-:::{.callout-note}
+:::: {.callout-note}
 
 The printed representation of strings is different from the string itself. The printed string object shows the escapes. To see the row content of a string, use `str_vew()`.
 
@@ -90,7 +91,7 @@ str_view(tricky_raw)
 
 A raw string starts with `r"(` and ends with `)"`, and everything in between is taken literally, including quotes and backslashes. If the string `)"`, you can use `r"[ ]"`, or `r"{ }"`, or inserting any number of dashes to make the opening and closing delimiters unique, e.g. `r"--( )--"` or `r"---( )---"`.
 
-:::{.callout-note}
+:::: {.callout-note}
 
 `str_view()` uses curly braces for tabs `{\t}` to make them more visible.
 
@@ -104,9 +105,9 @@ str_view(x)
 
 ### Exercises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 ```
 Create strings that contain the following values:
@@ -118,7 +119,7 @@ Create strings that contain the following values:
   3. \\\\\\
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 # 1. He said "That's amazing!"
@@ -143,9 +144,9 @@ str3 <- r"(\\\\\\)"
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
 ```
 Create the string in your R session and print it. 
@@ -156,7 +157,7 @@ Can you do a little googling to figure out what this special character is?
 x <- "This\u00a0is\u00a0tricky"
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 # 1. He said "That's amazing!"
@@ -165,7 +166,7 @@ x
 str_view(x)
 ```
 
-## Hint
+#### Hint
 
 ```
 `\u00a0` is a non-breaking space character.
@@ -244,8 +245,8 @@ str_flatten(c("x", "y", "z"), ", ")
 str_flatten(c("x", "y", "z"), ", ", last = ", and ")
 ```
 
-:::{.details open="true"}
-:::{.summary}
+:::: {.details open="true"}
+:::: {.summary}
 **str_flatten()**
 :::
 
@@ -301,9 +302,9 @@ df |>
 
 ### Exercises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 ```
 Compare and contrast the results of paste0() with str_c() for the following inputs:
@@ -315,7 +316,7 @@ str_c("hi ", NA)
 str_c(letters[1:2], letters[1:3])
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 
@@ -329,22 +330,22 @@ paste0(letters[1:2], letters[1:4])
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
 ````
 What’s the difference between `paste()` and `paste0()?` How can you recreate the equivalent of `paste()` with `str_c()`?
 ````
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try here!
 
 ```
 
-## Hint
+#### Hint
 
 ```
 paste (..., sep = " ", collapse = NULL, recycle0 = FALSE)
@@ -354,9 +355,9 @@ paste0(...,            collapse = NULL, recycle0 = FALSE)
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 3
+#### Question 3
 
 ````
 Convert the following expressions from str_c() to str_glue() or vice versa:
@@ -365,7 +366,7 @@ b. `str_glue("I'm {age} years old and live in {country}")`
 c. `str_c("\\section{", title, "}")`
 ````
 
-## Solution
+#### Solution
 
 ```{webr}
 # a.
@@ -550,7 +551,7 @@ df |>
 
 ### Letters
 
-::: {.callout-note title="Aims" icon=false}
+:::: {.callout-note title="Aims" icon=false}
 
 - Work with individual letters in a string.
 - Find the length of a string: `str_length()`
@@ -597,15 +598,15 @@ str_sub("ab", 1, 5)
 
 ### Exercises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 ```
 When computing the distribution of the length of babynames, why did we use `wt = n`?
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try and learn count() and its wt argument.
@@ -613,13 +614,12 @@ When computing the distribution of the length of babynames, why did we use `wt =
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
-```
 Use `str_length()` and `str_sub()` to extract the middle letter from each baby name. What will you do if the string has an even number of characters?
-```
+
 ```{webr}
 head(babynames)
 
@@ -635,14 +635,15 @@ babynames |>
 
 ```
 
-:::{.panel-tabset}
+:::
 
-## Question 3
+:::: {.panel-tabset}
 
-```
+#### Question 3
+
 Are there any major trends in the **length** of babynames over time? What about the popularity of first and last letters?
-```
-## Solution
+
+#### Solution
 
 Length of babynames over time:
 
@@ -687,9 +688,7 @@ first_trend |>
 
 ```
 
-:::
-
-## Solution
+#### Hint
 
 ```{webr}
 # Try and learn count() and its wt argument.
@@ -783,7 +782,7 @@ str_sort(c("a", "c", "ch", "h", "z"), locale = "cs")
 
 ### Introduction to regex
 
-::: {.callout-note title="Aims" icon=false}
+:::: {.callout-note title="Aims" icon=false}
 
 - Basic regex and most useful stringr functions.
 - Seven new topic: escaping, anchoring, character classes, shorthand classes, quantifiers, precedence, and grouping.
@@ -812,7 +811,7 @@ str_view(fruit, "berry")
 
 Letters and numbers match exactly and are called **literal characters**. Punctuation characters like `.`, `(`, `)`, `\`, `|`, `?`, `*`, `+`, `{`, `}`, `^`, and `$` have special meaning in regex and are called **metacharacters**:
 
-::: {.callout-tip title="Metacharacters"}
+:::: {.callout-tip title="Metacharacters"}
 
 - `.`: matches any character except a new line.
 - `^` and `$`: **anchors** to matches the start and end of a string.
@@ -905,8 +904,8 @@ str_view("abababa", "aba")
 `str_count()` can be used with `mutate()`. In the exemple below, count the number of vowels and consonants in each name.
 
 ```{r}
-babynames |> 
-  count(name) |> 
+babynames |>
+  count(name) |>
   mutate(
     vowels = str_count(name, "[aeiou]"),
     consonants = str_count(name, "[^aeiou]")
@@ -920,10 +919,10 @@ The code found only 2 vowels in `Aaban` instead of 3 because regex are case-sens
 
 ```{r}
 #| eval: false
-babynames |> 
-  count(name) |> 
+babynames |>
+  count(name) |>
   mutate(
-    name = str_to_lower(name),                      
+    name = str_to_lower(name),
     vowels = str_count(name, "[aeiou]"),
     consonants = str_count(name, "[^aeiou]")
   )
@@ -950,30 +949,30 @@ Below are some data derived from `babynames` where we have the name, gender, and
 
 ```{r}
 df <- tribble(
-  ~str,
-  "<Sheryl>-F_34",
-  "<Kisha>-F_45", 
-  "<Brandon>-N_33",
-  "<Sharon>-F_38", 
-  "<Penny>-F_58",
-  "<Justin>-M_41", 
-  "<Patricia>-F_84", 
+  ~str              ,
+  "<Sheryl>-F_34"   ,
+  "<Kisha>-F_45"    ,
+  "<Brandon>-N_33"  ,
+  "<Sharon>-F_38"   ,
+  "<Penny>-F_58"    ,
+  "<Justin>-M_41"   ,
+  "<Patricia>-F_84" ,
 )
 ```
 
 Using `separate_wider_regex()`, we can extract different parts of `df$str` into new columns:
 
 ```{r}
-df |> 
+df |>
   separate_wider_regex(
     str,
     pattern = c(
-                "<",
-                name = "[A-Za-z]+",
-                ">-",
-                gender = "[NMF]",
-                "_",
-                age = "[0-9]+"
+      "<",
+      name = "[A-Za-z]+",
+      ">-",
+      gender = "[NMF]",
+      "_",
+      age = "[0-9]+"
     )
   )
 ```
@@ -982,19 +981,19 @@ If the match fails, use `too_few = debug` to diagnose the problem.
 
 ### Exercises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 What baby name has the most vowels? What name has the highest proportion of vowels? (Hint: what is the denominator?)
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try here
 ```
 
-## Hint
+#### Hint
 
 ```r
 babynames |>
@@ -1014,35 +1013,35 @@ babynames |>
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
 Replace all forward slashes in "a/b/c/d/e" with backslashes. What happens if you attempt to undo the transformation by replacing all backslashes with forward slashes? (We’ll discuss the problem very soon.)
 
-## Solution
+#### Solution
 
 ```{webr}
 str_replace_all("a/b/c/d/e", "\\/", "/")
 
 ```
 
-## Hint
+#### Hint
 
 It seems like, slash in the `pattern` argument needs to be escaped with `\\`, but `replacement` argument we do not need to escape. 
 
 :::
 
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 3
+#### Question 3
 
 ```
 Implement a simple version of str_to_lower() using str_replace_all().
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try
@@ -1053,7 +1052,7 @@ Implement a simple version of str_to_lower() using str_replace_all().
 #  )
 ```
 
-## Hint
+#### Hint
 
 ```r
 babynames |> 
@@ -1065,21 +1064,21 @@ babynames |>
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 4
+#### Question 4
 
 ```
 Create a regular expression that will match telephone numbers as commonly written in your country.
 ```
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try and learn count() and its wt argument.
 ```
 
-## Hint
+#### Hint
 
 ```r
 
@@ -1114,7 +1113,7 @@ str_view(c("abc", "a.c", "bef"), "a\\.c")
 
 To match a literal backslash `\`, you need to escape it creating  regex `\\`. To create this regex, you need to use a string which also needs to escape each backslash, resulting in four backslashes `\\\\` to match a single backslash.
 
-::: {.callout-important}
+:::: {.callout-important}
 In this book, we’ll usually write regular expression without quotes, like `\.`. If we need to emphasize what you’ll actually type, we’ll surround it with quotes and add extra escapes, like `"\\."`.
 :::
 
@@ -1173,7 +1172,7 @@ str_replace_all("abc", c("$", "^", "\\b"), "--")
 
 Character classs or character set allows to match any character from a set of characters defined in `[]`. 
 
-::: {.callout-tip title="Character classes"}
+:::: {.callout-tip title="Character classes"}
 
 - `[abc]` matches any of the letters a, b, or c, 
 - `[^abc]` matches any character except a, b, or c
@@ -1188,7 +1187,7 @@ Character classs or character set allows to match any character from a set of ch
 
 :::
 
-::: {.panel-tabset}
+:::: {.panel-tabset}
 
 ## Code
 
@@ -1203,7 +1202,7 @@ str_view(x, "\\w+")
 str_view(x, "\\W+") 
 ```
 
-## Hint
+#### Hint
 
 ```r
 x <- "abcd ABCD 12345 -!@#%."
@@ -1228,7 +1227,7 @@ str_view(x, "\\W+") #<6>
 
 Quantifiers control how many times a pattern matches.
 
-::: {.callout-tip title="Quantifiers"}
+:::: {.callout-tip title="Quantifiers"}
 - `?` matches 0 or 1 time (makes a pattern optional).
 - `*` matches 0 or more times.
 - `+` matches 1 or more times.
@@ -1304,13 +1303,13 @@ str_match(x, "gr(?:e|a)y")
 
 ### Exercises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 How would you match literal string `"'\"`? How about `"$^$"`?
 
-## Solution
+#### Solution
 
 By escaping ' and \. "\\'" and "\\\\"
 
@@ -1318,7 +1317,7 @@ By escaping ' and \. "\\'" and "\\\\"
 # Try
 ```
 
-## Hint {#hint-2-4-15-1}
+#### Hint {#hint-2-4-15-1}
 
 ```r
 x <- c("'\\", "$^$")  #<1>
@@ -1330,27 +1329,27 @@ str_view(x, "(\\'\\\\)|(\\$\\^\\$)") #<2>
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
 Explain why each of these patterns don’t match a `\`: `"\"`, `"\\"`, `"\\\"`.
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try
 ```
 
-## Hint
+#### Hint
 
 See [Hint under Question 1 of Exercises 2.4.15](#hint-2-4-15-1).
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 3
+#### Question 3
 
 Given the corpus of common words in `stringr::words`, create regular expressions that find all words that:
 
@@ -1363,13 +1362,13 @@ a. Contain a vowel-consonant pair.
 a. Contain at least two vowel-consonant pairs in a row.
 a. Only consist of repeated vowel-consonant pairs.
 
-## Solution
+#### Solution
 
 ```{webr}
 # Try
 ```
 
-## Hint
+#### Hint
 
 ```{webr}
 #a.
@@ -1396,18 +1395,18 @@ str_view(words, "(^[aeiou]{1}[^aeiou]{1})+$")
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 4
+#### Question 4
 
 create 11 regular expressions that match the british or american spellings for each of the following words: airplane/aeroplane, aluminum/aluminium, analog/analogue, ass/arse, center/centre, defense/defence, donut/doughnut, gray/grey, modeling/modelling, skeptic/sceptic, summarize/summarise. try and make the shortest possible regex!
 
-## Solution
+#### Solution
 
 ```{webr}
 ```
 
-## Hint
+#### Hint
 
 ```{webr}
 #1.
@@ -1429,13 +1428,13 @@ str_view(x, "^a.+m$" )
 
 :::
 
-::: {.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 5
+#### Question 5
 
 Switch the first and last letters in words. Which of those strings are still words?
 
-## Solution
+#### Solution
 
 ```{webr}
 new_words <- head(words, n = 10)
@@ -1444,9 +1443,9 @@ str_replace_all(new_words, "^(\\w)(.*)(\\w)$", "\\3\\2\\1")
 ```
 :::
 
-::: {.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 6
+#### Question 6
 
 Describe in words what these regular expressions match: (read carefully to see if each entry is a regular expression or a string that defines a regular expression.)
 
@@ -1458,14 +1457,14 @@ a. `\<\.\.\.\>`
 a. `(.)\1\1`
 a. `"(..)\\1"` 
 
-## Solution
+#### Solution
 
 ```{webr}
 # Free to tru (see Hint)
 
 ```
 
-## Hint
+#### Hint
 
 a. matches any string.
 a. matches any sting of 1 or more letters enclosed in {}
@@ -1477,10 +1476,9 @@ a. matches any two characters repeated twice in a row.
 
 :::
 
-:::{.panel-tabset}
-Solve the beginner regexp crosswords at https://regexcrossword.com/challenges/beginner.
-:::
+#### Question 7
 
+Solve the beginner regexp crosswords at https://regexcrossword.com/challenges/beginner.
 
 ### Pattern control
 
@@ -1595,7 +1593,7 @@ Another alternative is, instead of matching consonants, one can match words that
 words[!str_detect(words, "[aeiou]")]
 ```
 
-::: {.callout-tip title="Important"}
+:::: {.callout-tip title="Important"}
 
 Whenever you are dealing with logical combinations, particularly those involving "and" or "or", or in general when you get stuck trying to create a single regex to solve your problem, **step back and think if you can break the problem into smaller pieces, solving each challenge before moving onto the next one, and combine them in several `str_detect()` calls.
 
@@ -1647,14 +1645,14 @@ str_view(colors())
 cols <- colors()
 cols <- cols[!str_detect(cols, "\\d")] #<1>
 pattern <- str_c("\\b(", str_flatten(cols, "|"), ")\\b") #<2>
-str_view(sentences, pattern)
+str_view(sentences, pattern)            #<3>
 ```
 
 1. exclude color names with digitis.
 2. build the pattern
 3. apply the pattern and find the match.
    
-:::{.callout-note}
+:::: {.callout-note}
 
 Whenever you create patterns from existing strings, it's wise to run them through `str_escape()` to ensure they match literally.
 
@@ -1663,9 +1661,9 @@ Whenever you create patterns from existing strings, it's wise to run them throug
 
 ### Execises
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 1
+#### Question 1
 
 For each of the following challenges, try solving it by using both a single regular expression, and a combination of multiple `str_detect()` calls.
 
@@ -1674,7 +1672,7 @@ a. Find all `words` that start or end with `x`.
 a. Find all `words` that start with a vowel and end with a consonant.
 a. Are there any `words` that contain at least one of each different vowel?
 
-## Solution
+#### Solution
 
 ```{r}
 #a.
@@ -1692,21 +1690,21 @@ words[str_detect(words, "[aeiou]")]
 :::
 
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 2
+#### Question 2
 
 Construct patterns to find evidence for and against the rule “i before e except after c”?
 
 :::
 
-:::{.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 3
+#### Question 3
 
  `colors()` contains a number of modifiers like “lightgray” and “darkblue”. How could you automatically identify these modifiers? (Think about how you might detect and then remove the colors that are modified).
 
-## Solution
+#### Solution
 
 ```{r}
 colrs <- colors()
@@ -1720,13 +1718,13 @@ colrs[!str_detect(colrs, pattern)]
 
 :::
 
-::: {.panel-tabset}
+:::: {.panel-tabset}
 
-## Question 4
+#### Question 4
 
 Create a regular expression that finds any base R dataset. You can get a list of these datasets via a special use of the `data()` function: `data(package = "datasets")$results[, "Item"]`. Note that a number of old datasets are individual vectors; these contain the name of the grouping “data frame” in parentheses, so you’ll need to strip those off.
 
-## Solution
+#### Solution
 
 ```{r}
 library(tidyverse)
@@ -2057,16 +2055,111 @@ In both base R and the tidyverse, ordered factors behave very similarly to regul
 
 ## Dates and times
 
-This section willl use the`{lubridate}` package and nyflights13 dataset in tydiverse package.
-
-Remember that most days has 365 days, but leap years have 366 days.
-
 ```{webr}
 library(tidyverse)
 library(nyflights13)
 ```
 
-## Missing values
+:::: {.callout-note title="Aims"}
+
+- To teach to create date-times from various inputs.
+- To teach how to extract date-times components.
+- To work with time spans.
+- How to work with time zomes.
+
+:::
+
+This section willl use the`{lubridate}` package and `nyflights13` dataset in tydiverse package.
+
+### Creating date/times
+
+Three types of date/time data:
+- date: tibbles prnt `<date>`
+- time within a day: tibbles print `<time>`
+- date-time (a date plus a time): identifies an instant in time typically to the nearest second. Tibbles print `<dttm>`. Base R calls thes POSIXct.
+
+R does not have a native class for storing times: use {hms} package if need be.
+
+:::: {.callout-tip}
+
+Use the simplest date type the works for you needs. Date-times are more complicated because they need to handle time zones: Use a date instead if enough for your needs!
+
+:::
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(gt)
+today() # current date
+now() # current date-time
+```
+
+Four ways to create a date/time:
+- when reading in a file with `{readr}`
+- from a string
+- from individual date-time components
+- from an existing date/time object
+  
+#### During import
+
+If your CSV file contains an **ISO8601**, readr will recognize it.
+
+:::: {.callout-note title="ISO8601"}
+
+ISO8601 is an international standard for writing dates where the components are organised from biggest to smallest (year to day) separated by `-`. ISO8601 can includes hour, minute, and second separated by `:`; and date and time components are separated with a `T` or a space.
+
+For example, 4:326pm on May 2 2022 is `2022-05-03 16:26` or `2022-05-03T1626`.
+
+:::
+
+For other date/time formats not in ISO8601, use `col_types()` plus `col_date()` or `col_datetime()`. @tbl-date-time-format-readr shows date formats understood by readr.
+
+
+```{r}
+#| label: tbl-date-time-format-readr
+#| tbl-cap: "Date formats understood by readr"
+#| echo: false
+
+date_formats <- tribble(
+  ~Type,    ~code,                  ~example,           ~description,
+  "Year",   "`%Y-%m-%d`",             "2010-01-01",       "Year-month-day (ISO 8601)",
+  "Year",   "`%Y/%m/%d`",             "2010/01/01",       "Year/month/day",
+  "Year",   "`%Y%m%d`",               "20100101",         "Compact year-month-day",
+  "Year",   "`%y-%m-%d`",             "10-01-01",         "Two-digit year",
+  "Year",   "`%m/%d/%Y`",             "01/31/2010",       "US style: month/day/year",
+  "Year",   "`%m-%d-%Y`",             "01-31-2010",       "US style with dashes",
+  "Year",   "`%d/%m/%Y`",             "31/01/2010",       "European style: day/month/year",
+  "Year",   "`%d-%m-%Y`",             "31-01-2010",       "European style with dashes",
+  "Year",   "`%d %b %Y`",             "01 Jan 2010",      "Day abbreviated-month year",
+  "Year",   "`%d %B %Y`",             "01 January 2010",  "Day full-month year",
+  "Year",   "`%b %d, %Y`",            "Jan 01, 2010",     "Abbrev-month day, year",
+  "Year",   "`%B %d, %Y`",            "January 01, 2010", "Full-month day, year",
+  "Year",   "`%d.%m.%Y`",             "31.01.2010",       "Dot-separated day.month.year",
+  "Year",   "`%e %b %Y`",             " 1 Jan 2010",      "Day with leading space allowed",
+  "Year",   "`%Y-%j`",                "2010-032",         "Year and day of year (Julian day)",
+  "Time",   "`%H:%M:%S`",             "16:26:00",         "24-hour time with seconds",
+  "Time",   "`%H:%M`",                "16:26",            "24-hour time without seconds",
+  "Time",   "`%I:%M %p`",             "04:26 PM",         "12-hour time with AM/PM",
+  "Time",   "`%H%M`",                 "1626",             "Compact 24-hour time (no colon)",
+  "Time",   "`%T`",                   "16:26:00",         "Alias for %H:%M:%S",
+  "Time",   "`%R`",                   "16:26",            "Alias for %H:%M",
+  "Time",   "`%S`",                   "00",               "Second (00–59)",
+  "Time",   "`%H`",                   "16",               "Hour (00–23)",
+  "Time",   "`%I`",                   "04",               "Hour (01–12)",
+  "Time",   "`%p`",                   "PM",               "AM/PM indicator",
+  "Time",   "`%z`",                   "+0200",            "Timezone offset from UTC",
+  "Time",   "`%Z`",                   "CEST",             "Timezone abbreviation",
+  "Other",  "`%.`",                   "Skip one digit",   ":",
+  "Other",  "%*",                     "Skip any number of non-digits",  "",
+)
+
+date_formats |>
+  select(Type, code, description, example) |> 
+  group_by(Type) |> 
+  gt() 
+```
+
+## Mssing values
 
 
 ## Joins
