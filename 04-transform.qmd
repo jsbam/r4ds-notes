@@ -602,9 +602,10 @@ str_sub("ab", 1, 5)
 
 #### Question 1
 
-```
+
+
 When computing the distribution of the length of babynames, why did we use `wt = n`?
-```
+
 
 #### Solution
 
@@ -618,7 +619,15 @@ When computing the distribution of the length of babynames, why did we use `wt =
 
 #### Question 2
 
+<<<<<<< Updated upstream
+||||||| Stash base
+```
+=======
+
+>>>>>>> Stashed changes
+
 Use `str_length()` and `str_sub()` to extract the middle letter from each baby name. What will you do if the string has an even number of characters?
+
 
 ```{webr}
 head(babynames)
@@ -632,7 +641,6 @@ babynames |>
     end = (str_length(name) / 2) + 0.5
   )
  )
-
 ```
 
 :::
@@ -641,9 +649,22 @@ babynames |>
 
 #### Question 3
 
+<<<<<<< Updated upstream
+||||||| Stash base
+```
+=======
+
+>>>>>>> Stashed changes
 Are there any major trends in the **length** of babynames over time? What about the popularity of first and last letters?
 
+<<<<<<< Updated upstream
 #### Solution
+||||||| Stash base
+```
+## Solution
+=======
+## Solution
+>>>>>>> Stashed changes
 
 Length of babynames over time:
 
