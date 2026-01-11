@@ -41,12 +41,16 @@ webr:
 ### Creating strings, escapes and raw strings
 
 ```{r}
+#| warning: false
+#| message: false
+#| include: false
+
 # install.packages(
 #   c("arrow", "babynames", "curl", "duckdb", "gapminder",
 #     "ggrepel", "ggridges", "ggthemes", "hexbin", "janitor", "Lahman",
 #     "leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins",
 #     "repurrrsive", "tidymodels", "writexl")
-#   )
+# )
 library(tidyverse)
 conflicted::conflicts_prefer(
   dplyr::filter(),
