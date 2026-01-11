@@ -71,12 +71,11 @@ backslash <- "\\"
 
 The printed representation of strings is different from the string itself. The printed string object shows the escapes. To see the row content of a string, use `str_vew()`.
 
-```{r}
+```{webr}
 x <- c(single_quote, double_quote, backslash)
 x
 str_view(x)
 ```
-
 :::
 
 When you habve many escapes `\` in a string, so called [leaning toothpick syndrome](https://en.wikipedia.org/wiki/Leaning_toothpick_syndrome), you can use **raw strings**.
