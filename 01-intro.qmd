@@ -2,9 +2,6 @@
 format: 
   live-html:
     css: "style-webr.css"
-    code-blocks:
-      webr:
-        engine: r
 webr:
   cell-options:
     fig-width: 5
@@ -28,6 +25,7 @@ webr:
     - forcats # factor
     - downlit
     - xml2
+    - arrow
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
@@ -36,12 +34,11 @@ webr:
 
 ```{r}
 library(tidyverse)
-
+conflicted::conflicts_prefer(
+  dplyr::filter(),
+  dplyr::lag(),
+)
 ```
-
-This is a book created from markdown and executable code.
-
-See @knuth84 for additional discussion of literate programming.
 
 ```{webr}
 #pacman::p_load(
