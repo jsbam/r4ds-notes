@@ -31,6 +31,6 @@ webr:
 
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This quarto book contains my notes of the book [R for Data Science](https://r4ds.hadley.nz/). I took this opportunity to learn `webr` and the `live-html`format.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+To learn more about Quarto books visit <https://quarto.org/docs/books>. More information on `webr` may be found at <https://docs.r-wasm.org/webr/latest/>.

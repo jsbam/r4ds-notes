@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "My R4DS notes using webr",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "text": "Preface\nThis quarto book contains my notes of the book R for Data Science. I took this opportunity to learn webr and the live-htmlformat.\nTo learn more about Quarto books visit https://quarto.org/docs/books. More information on webr may be found at https://docs.r-wasm.org/webr/latest/.",
     "crumbs": [
       "Preface"
     ]

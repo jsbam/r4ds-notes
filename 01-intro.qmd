@@ -48,20 +48,6 @@ This is a book created from markdown and executable code.
 
 See @knuth84 for additional discussion of literate programming.
 
-```{webr}
-#pacman::p_load(
-# tidyverse,
-# palmerpenguins,  # penguins dataset
-# nycflights13,    # data on flights from NY airport
-# janitor,
-# Lahman,          # basketball data
-# usethis,
-# ggridges,        # ridgline plots (extension of ggplot)
-# rio,             # import data from other software
-# forcats # factor
-#)
-```
-
 ## Visualization
 
 ```{webr}
